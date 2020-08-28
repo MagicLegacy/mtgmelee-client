@@ -9,12 +9,13 @@
 
 declare(strict_types=1);
 
-namespace MagicLegacy\Component\MtgMelee\Importer\Service;
+namespace MagicLegacy\Component\MtgMelee\Client\Service;
 
-use MagicLegacy\Component\MtgMelee\Importer\Entity\Player;
-use MagicLegacy\Component\MtgMelee\Importer\Entity\Pairing;
-use MagicLegacy\Component\MtgMelee\Importer\Entity\Result;
-use MagicLegacy\Component\MtgMelee\Importer\Exception\ClientException;
+use MagicLegacy\Component\MtgMelee\Client\Entity\Player;
+use MagicLegacy\Component\MtgMelee\Client\Entity\Pairing;
+use MagicLegacy\Component\MtgMelee\Client\Entity\Result;
+use MagicLegacy\Component\MtgMelee\Client\Exception\ClientException;
+use MagicLegacy\Component\MtgMelee\Client\MtgMeleeClient;
 
 /**
  * Class Standing
@@ -23,7 +24,7 @@ use MagicLegacy\Component\MtgMelee\Importer\Exception\ClientException;
  */
 class Standing
 {
-    /** @var Client $client */
+    /** @var MtgMeleeClient $client */
     private $client;
 
     /** @var int $day */
@@ -35,11 +36,11 @@ class Standing
     /**
      * Standing constructor.
      *
-     * @param Client $client
+     * @param MtgMeleeClient $client
      * @param int $day
      * @param bool $isTop8
      */
-    public function __construct(Client $client, int $day = 0, bool $isTop8 = false)
+    public function __construct(MtgMeleeClient $client, int $day = 0, bool $isTop8 = false)
     {
         $this->client = $client;
         $this->day    = $day;

@@ -9,9 +9,9 @@
 
 declare(strict_types=1);
 
-namespace MagicLegacy\Component\MtgMelee\Importer\Service;
+namespace MagicLegacy\Component\MtgMelee\Client;
 
-use MagicLegacy\Component\MtgMelee\Importer\Exception\ClientException;
+use MagicLegacy\Component\MtgMelee\Client\Exception\ClientException;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
@@ -25,7 +25,7 @@ use Psr\Http\Message\UriInterface;
  *
  * @author Romain Cottard
  */
-class Client
+class MtgMeleeClient
 {
     /** @var ClientInterface $client */
     private $client;

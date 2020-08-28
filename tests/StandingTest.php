@@ -9,11 +9,11 @@
 
 declare(strict_types=1);
 
-namespace MagicLegacy\Component\MtgMelee\Importer\Tests;
+namespace MagicLegacy\Component\MtgMelee\Client\Tests;
 
-use MagicLegacy\Component\MtgMelee\Importer\Exception\ClientException;
-use MagicLegacy\Component\MtgMelee\Importer\Service\Client;
-use MagicLegacy\Component\MtgMelee\Importer\Service\Standing;
+use MagicLegacy\Component\MtgMelee\Client\Exception\ClientException;
+use MagicLegacy\Component\MtgMelee\Client\MtgMeleeClient;
+use MagicLegacy\Component\MtgMelee\Client\Service\Standing;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Client\ClientExceptionInterface;
@@ -116,15 +116,15 @@ class StandingTest extends TestCase
 
     /**
      * @param ResponseInterface $mockResponse
-     * @return Client
+     * @return MtgMeleeClient
      */
-    private function getClient(ResponseInterface $mockResponse): Client
+    private function getClient(ResponseInterface $mockResponse): MtgMeleeClient
     {
         $httpFactory    = new Psr17Factory();
         $httpClientMock = $this->getMockBuilder(ClientInterface::class)->getMock();
         $httpClientMock->method('sendRequest')->willReturn($mockResponse);
 
-        return new Client(
+        return new MtgMeleeClient(
             $httpClientMock,
             $httpFactory,
             $httpFactory,
@@ -133,16 +133,16 @@ class StandingTest extends TestCase
     }
 
     /**
-     * @return Client
+     * @return MtgMeleeClient
      */
-    private function getClientWithException(): Client
+    private function getClientWithException(): MtgMeleeClient
     {
         $httpFactory    = new Psr17Factory();
         $httpClientMock = $this->getMockBuilder(ClientInterface::class)->getMock();
         $exception      = new class extends \Exception implements ClientExceptionInterface {};
         $httpClientMock->method('sendRequest')->willThrowException($exception);
 
-        return new Client(
+        return new MtgMeleeClient(
             $httpClientMock,
             $httpFactory,
             $httpFactory,

@@ -1,5 +1,5 @@
 {
-  "name": "magiclegacy/mtgmelee-importer",
+  "name": "magiclegacy/mtgmelee-client",
   "description": "Component to retrieve data from MtgMelee.com",
   "type": "library",
   "license": "MIT",
@@ -14,12 +14,12 @@
 
   "autoload": {
     "psr-4": {
-      "MagicLegacy\\Component\\MtgMelee\\Importer\\": "./src"
+      "MagicLegacy\\Component\\MtgMelee\\Client\\": "./src"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "MagicLegacy\\Component\\MtgMelee\\Importer\\Tests\\": "tests/"
+      "MagicLegacy\\Component\\MtgMelee\\Client\\Tests\\": "tests/"
     }
   },
 

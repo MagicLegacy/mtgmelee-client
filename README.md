@@ -1,11 +1,14 @@
-# mtgmelee-importer
+# MtgMelee Client
 
-MtgMelee Data importer
+MtgMelee Client to retrieve some information from MtgMelee.
+
+Currently supported data:
+ * Pairings (with results)
 
 
 ## Composer
 ```bash
-composer require magiclegacy/mtgmelee-importer 
+composer require magiclegacy/mtgmelee-client
 ```
 
 ## Usage in application
@@ -14,14 +17,14 @@ composer require magiclegacy/mtgmelee-importer
 
 namespace Application;
 
-use MagicLegacy\Component\MtgMelee\Importer\Service\Client;
-use MagicLegacy\Component\MtgMelee\Importer\Service\Standing;
+use MagicLegacy\Component\MtgMelee\Client\MtgMeleeClient;
+use MagicLegacy\Component\MtgMelee\Client\Service\Standing;
 use Eureka\Component\Curl;
 use Nyholm\Psr7\Factory\Psr17Factory;
 
 //~ Declare tier required services (included as dependencies)
 $httpFactory    = new Psr17Factory();
-$mtgMeleeClient = new Client(
+$mtgMeleeClient = new MtgMeleeClient(
     new Curl\HttpClient(),
     $httpFactory,
     $httpFactory,

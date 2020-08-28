@@ -9,7 +9,7 @@
 
 declare(strict_types=1);
 
-namespace MagicLegacy\Component\MtgMelee\Importer\Exception;
+namespace MagicLegacy\Component\MtgMelee\Client\Exception;
 
 /**
  * Class ClientException

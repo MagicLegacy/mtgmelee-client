@@ -9,7 +9,7 @@
 
 declare(strict_types=1);
 
-namespace MagicLegacy\Component\MtgMelee\Importer\Entity;
+namespace MagicLegacy\Component\MtgMelee\Client\Entity;
 
 /**
  * Class Player
