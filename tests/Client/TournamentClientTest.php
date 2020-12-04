@@ -138,7 +138,8 @@ class TournamentClientTest extends TestCase
     {
         $httpFactory    = new Psr17Factory();
         $httpClientMock = $this->getMockBuilder(ClientInterface::class)->getMock();
-        $exception      = new class extends \Exception implements ClientExceptionInterface {};
+        $exception      = new class extends \Exception implements ClientExceptionInterface {
+        };
         $httpClientMock->method('sendRequest')->willThrowException($exception);
 
         return new TournamentClient(

@@ -150,7 +150,6 @@ class AbstractClient
         return $request
             ->withAddedHeader('Accept', 'application/json')
         ;
-
     }
 
     /**
