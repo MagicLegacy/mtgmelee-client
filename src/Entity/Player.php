@@ -9,50 +9,54 @@
 
 declare(strict_types=1);
 
-namespace MagicLegacy\Component\MtgMelee\Client\Entity;
+namespace MagicLegacy\Component\MtgMelee\Entity;
+
+use MagicLegacy\Component\MtgMelee\Serializer\MtgMeleeSerializableTrait;
 
 /**
  * Class Player
  *
  * @author Romain Cottard
  */
-class Player
+class Player implements \JsonSerializable
 {
+    use MtgMeleeSerializableTrait;
+
     /** @var string $guid */
-    private $guid = '';
+    private string $guid = '';
 
     /** @var int $id */
-    private $id = 0;
+    private int $id = 0;
 
-    /** @var $userId */
-    private $userId = '';
+    /** @var string $userId */
+    private string $userId = '';
 
-    /** @var $userName */
-    private $userName = '';
+    /** @var string $userName */
+    private string $userName = '';
 
     /** @var string $name */
-    private $name = '';
+    private string $name = '';
 
     /** @var bool $checkedIn */
-    private $checkedIn = false;
+    private bool $checkedIn = false;
 
     /** @var bool $confirmation */
-    private $confirmation = false;
+    private bool $confirmation = false;
 
     /** @var string $deckArchetypeName */
-    private $deckArchetypeName = '';
+    private string $deckArchetypeName = '';
 
     /** @var int $deckListId */
-    private $deckListId = 0;
+    private int $deckListId = 0;
 
     /** @var string $discordTag */
-    private $discordTag = '';
+    private string $discordTag = '';
 
     /** @var string $arenaTag */
-    private $arenaTag = '';
+    private string $arenaTag = '';
 
     /** @var string $twitchLink */
-    private $twitchLink = '';
+    private string $twitchLink = '';
 
     /**
      * @return string
@@ -93,18 +97,18 @@ class Player
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getUserId()
+    public function getUserId(): string
     {
         return $this->userId;
     }
 
     /**
-     * @param mixed $userId
+     * @param string  $userId
      * @return Player
      */
-    public function setUserId($userId)
+    public function setUserId(string $userId): Player
     {
         $this->userId = $userId;
 
@@ -112,18 +116,18 @@ class Player
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getUserName()
+    public function getUserName(): string
     {
         return $this->userName;
     }
 
     /**
-     * @param mixed $userName
+     * @param string $userName
      * @return Player
      */
-    public function setUserName($userName)
+    public function setUserName(string $userName): Player
     {
         $this->userName = $userName;
 

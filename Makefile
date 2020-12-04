@@ -34,11 +34,10 @@ php80compatibility: build/reports/php80/compatibility_check.xml
 phpcbf: composer.lock
 	./vendor/bin/phpcbf --standard=./config/phpcs/MagicLegacy.xml src/ tests/
 
-build/reports/phpunit/unit.xml build/reports/phpunit/unit.cov: vendor/bin/phpunit $(PHP_FILES)
+tests: vendor/bin/phpunit $(PHP_FILES)
 	mkdir -p build/reports/phpunit
 	php -dzend_extension=xdebug.so ./vendor/bin/phpunit -c ./phpunit.xml.dist --coverage-clover=./build/reports/phpunit/clover.xml --log-junit=./build/reports/phpunit/unit.xml --coverage-php=./build/reports/phpunit/unit.cov --coverage-html=./build/reports/coverage/ --fail-on-warning
 
-tests: build/reports/phpunit/unit.xml build/reports/phpunit/unit.cov
-
 testdox: vendor/bin/phpunit $(PHP_FILES)
+	mkdir -p build/reports/phpunit
 	php -dzend_extension=xdebug.so ./vendor/bin/phpunit -c ./phpunit.xml.dist --fail-on-warning --testdox

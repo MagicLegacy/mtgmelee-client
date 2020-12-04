@@ -9,13 +9,13 @@
 
 declare(strict_types=1);
 
-namespace MagicLegacy\Component\MtgMelee\Client\Exception;
+namespace MagicLegacy\Component\MtgMelee\Exception;
 
 /**
- * Class ClientException
+ * Class MtgMeleeSerializerException
  *
- * @package MagicLegacy\Component\MtgMelee\Exception
+ * @author Romain Cottard
  */
-class ClientException extends \RuntimeException
+class MtgMeleeSerializerException extends MtgMeleeComponentException
 {
 }

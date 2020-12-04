@@ -9,35 +9,33 @@
 
 declare(strict_types=1);
 
-namespace MagicLegacy\Component\MtgMelee\Client\Entity;
+namespace MagicLegacy\Component\MtgMelee\Entity;
+
+use MagicLegacy\Component\MtgMelee\Serializer\MtgMeleeSerializableTrait;
 
 /**
  * Class Pairing
  *
  * @author Romain Cottard
  */
-class Pairing
+class Pairing implements \JsonSerializable
 {
+    use MtgMeleeSerializableTrait;
+
     /** @var int $tournamentId */
-    private $tournamentId;
+    private int $tournamentId;
 
     /** @var int $round */
-    private $round;
+    private int $round;
 
     /** @var Player $playerOne */
-    private $playerOne;
+    private Player $playerOne;
 
     /** @var Player $playerTwo */
-    private $playerTwo;
+    private Player $playerTwo;
 
     /** @var Result $result */
-    private $result;
-
-    /** @var int $day */
-    private $day = 0;
-
-    /** @var bool $isTop8 */
-    private $isTop8 = false;
+    private Result $result;
 
     /**
      * Pairing constructor.
@@ -102,44 +100,6 @@ class Pairing
     public function getRound(): int
     {
         return $this->round;
-    }
-
-    /**
-     * @return int
-     */
-    public function getDay(): int
-    {
-        return $this->day;
-    }
-
-    /**
-     * @param int $day
-     * @return $this
-     */
-    public function setDay(int $day): Pairing
-    {
-        $this->day = $day;
-
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isTop8(): bool
-    {
-        return $this->isTop8;
-    }
-
-    /**
-     * @param bool $isTop8
-     * @return Pairing
-     */
-    public function setIsTop8(bool $isTop8): Pairing
-    {
-        $this->isTop8 = $isTop8;
-
-        return $this;
     }
 
     /**

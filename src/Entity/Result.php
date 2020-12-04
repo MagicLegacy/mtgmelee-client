@@ -9,32 +9,36 @@
 
 declare(strict_types=1);
 
-namespace MagicLegacy\Component\MtgMelee\Client\Entity;
+namespace MagicLegacy\Component\MtgMelee\Entity;
+
+use MagicLegacy\Component\MtgMelee\Serializer\MtgMeleeSerializableTrait;
 
 /**
  * Class Result
  *
  * @author Romain Cottard
  */
-class Result
+class Result implements \JsonSerializable
 {
+    use MtgMeleeSerializableTrait;
+
     /** @var Player $playerOne */
-    private $playerOne;
+    private Player $playerOne;
 
     /** @var Player $playerTwo */
-    private $playerTwo;
+    private Player $playerTwo;
 
     /** @var int $scorePlayerOne */
-    private $scorePlayerOne = 0;
+    private int $scorePlayerOne = 0;
 
     /** @var int $scorePlayerTwo */
-    private $scorePlayerTwo = 0;
+    private int $scorePlayerTwo = 0;
 
     /** @var bool $isDraw */
-    private $isDraw = false;
+    private bool $isDraw = false;
 
     /** @var bool $isBye */
-    private $isBye = false;
+    private bool $isBye = false;
 
     /**
      * Result constructor.
@@ -42,10 +46,8 @@ class Result
      * @param Player $playerOne
      * @param Player $playerTwo
      */
-    public function __construct(
-        Player $playerOne,
-        Player $playerTwo
-    ) {
+    public function __construct(Player $playerOne, Player $playerTwo)
+    {
         $this->playerOne      = $playerOne;
         $this->playerTwo      = $playerTwo;
     }

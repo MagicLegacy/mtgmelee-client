@@ -17,14 +17,14 @@ composer require magiclegacy/mtgmelee-client
 
 namespace Application;
 
-use MagicLegacy\Component\MtgMelee\Client\MtgMeleeClient;
+use MagicLegacy\Component\MtgMelee\Client\TournamentClient;
 use MagicLegacy\Component\MtgMelee\Client\Service\Standing;
 use Eureka\Component\Curl;
 use Nyholm\Psr7\Factory\Psr17Factory;
 
 //~ Declare tier required services (included as dependencies)
 $httpFactory    = new Psr17Factory();
-$mtgMeleeClient = new MtgMeleeClient(
+$mtgMeleeClient = new TournamentClient(
     new Curl\HttpClient(),
     $httpFactory,
     $httpFactory,

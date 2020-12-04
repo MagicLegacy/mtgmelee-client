@@ -9,55 +9,27 @@
 
 declare(strict_types=1);
 
-namespace MagicLegacy\Component\MtgMelee\Client\Service;
+namespace MagicLegacy\Component\MtgMelee\Formatter;
 
-use MagicLegacy\Component\MtgMelee\Client\Entity\Player;
-use MagicLegacy\Component\MtgMelee\Client\Entity\Pairing;
-use MagicLegacy\Component\MtgMelee\Client\Entity\Result;
-use MagicLegacy\Component\MtgMelee\Client\Exception\ClientException;
-use MagicLegacy\Component\MtgMelee\Client\MtgMeleeClient;
+use MagicLegacy\Component\MtgMelee\Entity\Pairing;
+use MagicLegacy\Component\MtgMelee\Entity\Player;
+use MagicLegacy\Component\MtgMelee\Entity\Result;
 
 /**
- * Class Standing
+ * Class PairingsFormatter
  *
  * @author Romain Cottard
  */
-class Standing
+final class PairingsFormatter implements FormatterInterface
 {
-    /** @var MtgMeleeClient $client */
-    private $client;
-
-    /** @var int $day */
-    private $day;
-
-    /** @var bool $isTop8 */
-    private $isTop8;
-
     /**
-     * Standing constructor.
+     * Format data & return list of value object.
      *
-     * @param MtgMeleeClient $client
-     * @param int $day
-     * @param bool $isTop8
-     */
-    public function __construct(MtgMeleeClient $client, int $day = 0, bool $isTop8 = false)
-    {
-        $this->client = $client;
-        $this->day    = $day;
-        $this->isTop8 = $isTop8;
-    }
-
-    /**
-     * @param int $id
-     * @param int $nbResults
-     * @param int $start
+     * @param mixed $data
      * @return Pairing[]
-     * @throws ClientException
      */
-    public function getPairings(int $id, int $nbResults = 500, int $start = 0): array
+    public function format($data)
     {
-        $data = $this->client->getRoundPairings($id, $nbResults, $start);
-
         if (!isset($data->data)) {
             return [];
         }
@@ -92,10 +64,7 @@ class Standing
      */
     private function getPairing(\stdClass $pairing): Pairing
     {
-        return (new Pairing($pairing->TournamentId ?? 0, $pairing->RoundNumber ?? 1))
-            ->setDay($this->day)
-            ->setIsTop8($this->isTop8)
-        ;
+        return (new Pairing($pairing->TournamentId ?? 0, $pairing->RoundNumber ?? 1));
     }
 
     /**
@@ -136,7 +105,7 @@ class Standing
             $result->setScore($matches[1], (int) $matches[2], (int) $matches[3]);
         } elseif (stripos('0-0-3 Draw', $pairing->Result) === 0) {
             $result->setDraw();
-        } elseif (preg_match('`(.+?) was awarded a bye`', $pairing->Result, $matches)) {
+        } elseif (preg_match('`(.+?) was assigned a bye`', $pairing->Result, $matches)) {
             $result->setBye();
         } else {
             throw new \RuntimeException('Invalid score: "' . $pairing->Result . '"');
