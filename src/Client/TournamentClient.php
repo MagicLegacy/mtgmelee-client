@@ -11,8 +11,10 @@ declare(strict_types=1);
 
 namespace MagicLegacy\Component\MtgMelee\Client;
 
+use MagicLegacy\Component\MtgMelee\Entity\DeckList;
 use MagicLegacy\Component\MtgMelee\Entity\Pairing;
 use MagicLegacy\Component\MtgMelee\Exception\MtgMeleeClientException;
+use MagicLegacy\Component\MtgMelee\Formatter\DeckListFormatter;
 use MagicLegacy\Component\MtgMelee\Formatter\PairingsFormatter;
 
 /**
@@ -38,6 +40,15 @@ class TournamentClient extends AbstractClient
         return $this->fetchResult('/Tournament/GetRoundPairings/' . $id, new PairingsFormatter(), 'POST', $params);
     }
 
+    /**
+     * @param int $id
+     * @return DeckList
+     * @throws MtgMeleeClientException
+     */
+    public function getDeckList(int $id): DeckList
+    {
+        return $this->fetchResult('/Decklist/GetDecklistDetails?id=' . $id, new DeckListFormatter());
+    }
 
     /**
      * @param int $nbResults

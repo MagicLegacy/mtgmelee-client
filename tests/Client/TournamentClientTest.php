@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace MagicLegacy\Component\MtgMelee\Test\Client;
 
 use MagicLegacy\Component\MtgMelee\Client\TournamentClient;
+use MagicLegacy\Component\MtgMelee\Entity\DeckList;
 use MagicLegacy\Component\MtgMelee\Exception\MtgMeleeClientException;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use PHPUnit\Framework\TestCase;
@@ -27,6 +28,7 @@ class TournamentClientTest extends TestCase
 {
     /**
      * @return void
+     * @throws MtgMeleeClientException
      */
     public function testIGetValidPairingsForGivenPairingId(): void
     {
@@ -42,8 +44,6 @@ class TournamentClientTest extends TestCase
 
         $this->assertSame(1, $pairings[0]->getTournamentId(), 'Tournament is invalid');
         $this->assertSame(1, $pairings[0]->getRound(), 'Round is invalid');
-        //$this->assertSame(3, $pairings[0]->getDay(), 'Day is invalid');
-        //$this->assertTrue($pairings[0]->isTop8());
 
         //~ Nissa
         $this->assertSame('Nissa vs : Nissa was awarded a bye', (string) $pairings[0]->getResult());
@@ -83,6 +83,28 @@ class TournamentClientTest extends TestCase
 
     /**
      * @return void
+     * @throws MtgMeleeClientException
+     */
+    public function testIGetValidDeckListForGivenDeckId(): void
+    {
+        //~ Given
+        $client = $this->getClient($this->getDeckListResponseMock());
+
+        //~ When
+        $deckList = $client->getDeckList(1);
+
+        //~ Then
+        $this->assertInstanceOf(DeckList::class, $deckList);
+
+        $this->assertSame(1, $deckList->getId());
+        $this->assertSame('Sultaï', $deckList->getArchetype());
+        $this->assertSame('http://cdn.example.com/image/test.jpg', $deckList->getImageUrl());
+        $this->assertSame("Deck\n4 Card\n\nSideboard\n4 Other Card", $deckList->getArenaList());
+    }
+
+    /**
+     * @return void
+     * @throws MtgMeleeClientException
      */
     public function testIHaveEmptyPairingsWhenResponseFromMtgMeleeIsEmpty(): void
     {
@@ -163,6 +185,22 @@ class TournamentClientTest extends TestCase
             "draw": 1,
             "recordsTotal": 0,
             "recordsFiltered": 0
+        }');
+
+        $stream->rewind();
+        return $response->withBody($stream);
+    }
+
+    private function getDeckListResponseMock()
+    {
+        $httpFactory = new Psr17Factory();
+
+        $response = $httpFactory->createResponse(200);
+        $stream   = $httpFactory->createStream('{
+            "ID": 1,
+            "Name": "Sultaï",
+            "ScreenshotUrl": "http://cdn.example.com/image/test.jpg",
+            "ArenaDecklistString": "Deck\r\n4 Card\r\n\r\nSideboard\r\n4 Other Card"
         }');
 
         $stream->rewind();
