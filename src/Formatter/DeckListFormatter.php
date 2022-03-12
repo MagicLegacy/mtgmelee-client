@@ -23,8 +23,8 @@ final class DeckListFormatter implements FormatterInterface
     /**
      * Format data & return list of value object.
      *
-     * @param mixed $data
-     * @return DeckList
+     * @param \stdClass|null $data
+     * @return DeckList|null
      */
     public function format($data)
     {
@@ -34,9 +34,9 @@ final class DeckListFormatter implements FormatterInterface
 
         return new DeckList(
             (int) $data->ID,
-            (string) $data->Name ?? '',
-            (string) $data->ScreenshotUrl ?? '',
-            (string) $data->ArenaDecklistString ?? ''
+            (string) ($data->Name ?? ''),
+            (string) ($data->ScreenshotUrl ?? ''),
+            (string) ($data->ArenaDecklistString ?? '')
         );
     }
 }

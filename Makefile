@@ -1,43 +1,76 @@
-.PHONY: install update phpcs phpcbf tests
+.PHONY: validate install update phpcs phpcbf php74compatibility php81compatibility phpstan analyze tests testdox ci clean
 
 PHP_FILES := $(shell find src tests -type f -name '*.php')
+define header =
+    @if [ -t 1 ]; then printf "\n\e[37m\e[100m  \e[104m $(1) \e[0m\n"; else printf "\n### $(1)\n"; fi
+endef
+
+#~ Composer dependency
+validate:
+	$(call header,Composer Validation)
+	@composer validate
 
 install:
-	composer install
+	$(call header,Composer Install)
+	@composer install
 
 update:
-	composer update
+	$(call header,Composer Update)
+	@composer update
 
-composer.lock: composer.json
-	composer install
+composer.lock: install
 
+#~ Vendor binaries dependencies
+vendor/bin/phpcbf: composer.lock
+vendor/bin/phpcs: composer.lock
+vendor/bin/phpstan: composer.lock
 vendor/bin/phpunit: composer.lock
 
-build/reports/cs/MagicLegacy.xml: composer.lock $(PHP_FILES)
-	mkdir -p build/reports/cs
-	./vendor/bin/phpcs --standard=./config/phpcs/MagicLegacy.xml --cache=./build/cs_magiclegacy.cache -p --report-full --report-checkstyle=./build/reports/cs/MagicLegacy.xml src/ tests/
+#~ Report directories dependencies
+build/reports/phpunit:
+	@mkdir -p build/reports/phpunit
 
-build/reports/php74/compatibility_check.xml: composer.lock $(PHP_FILES)
-	mkdir -p build/reports/php74
-	./vendor/bin/phpcs --standard=./config/phpcs/PHP74Compatibility.xml --cache=./build/php74.cache -p --report-full --report-checkstyle=./build/reports/php74/compatibility_check.xml src/ tests/
+build/reports/phpcs:
+	@mkdir -p build/reports/cs
 
-build/reports/php80/compatibility_check.xml: composer.lock $(PHP_FILES)
-	mkdir -p build/reports/php80
-	./vendor/bin/phpcs --standard=./config/phpcs/PHP80Compatibility.xml --cache=./build/php80.cache -p --report-full --report-checkstyle=./build/reports/php80/compatibility_check.xml src/ tests/
+build/reports/phpstan:
+	@mkdir -p build/reports/phpstan
 
-phpcs: build/reports/cs/MagicLegacy.xml
+#~ main commands
+phpcs: vendor/bin/phpcs build/reports/phpcs
+	$(call header,Checking Code Style)
+	@./vendor/bin/phpcs --standard=./ci/phpcs/eureka.xml --cache=./build/cs_eureka.cache -p --report-full --report-checkstyle=./build/reports/cs/eureka.xml src/ tests/
 
-php74compatibility: build/reports/php74/compatibility_check.xml
+phpcbf: vendor/bin/phpcbf
+	$(call header,Fixing Code Style)
+	@./vendor/bin/phpcbf --standard=./ci/phpcs/eureka.xml src/ tests/
 
-php80compatibility: build/reports/php80/compatibility_check.xml
+php74compatibility: vendor/bin/phpstan build/reports/phpstan
+	$(call header,Checking PHP 7.4 compatibility)
+	@./vendor/bin/phpstan analyse --configuration=./ci/php74-compatibility.neon --error-format=table
 
-phpcbf: composer.lock
-	./vendor/bin/phpcbf --standard=./config/phpcs/MagicLegacy.xml src/ tests/
+php81compatibility: vendor/bin/phpstan build/reports/phpstan
+	$(call header,Checking PHP 8.1 compatibility)
+	@./vendor/bin/phpstan analyse --configuration=./ci/php81-compatibility.neon --error-format=table
 
-tests: vendor/bin/phpunit $(PHP_FILES)
-	mkdir -p build/reports/phpunit
-	php -dzend_extension=xdebug.so ./vendor/bin/phpunit -c ./phpunit.xml.dist --coverage-clover=./build/reports/phpunit/clover.xml --log-junit=./build/reports/phpunit/unit.xml --coverage-php=./build/reports/phpunit/unit.cov --coverage-html=./build/reports/coverage/ --fail-on-warning
+analyze: vendor/bin/phpstan build/reports/phpstan
+	$(call header,Running Static Analyze - Pretty tty format)
+	@./vendor/bin/phpstan analyse --error-format=table
+
+phpstan: vendor/bin/phpstan build/reports/phpstan
+	$(call header,Running Static Analyze)
+	@./vendor/bin/phpstan analyse --error-format=checkstyle > ./build/reports/phpstan/phpstan.xml
+
+tests: vendor/bin/phpunit build/reports/phpunit $(PHP_FILES)
+	$(call header,Running Unit Tests)
+	@XDEBUG_MODE=coverage php -dzend_extension=xdebug.so ./vendor/bin/phpunit --coverage-clover=./build/reports/phpunit/clover.xml --log-junit=./build/reports/phpunit/unit.xml --coverage-php=./build/reports/phpunit/unit.cov --coverage-html=./build/reports/coverage/ --fail-on-warning
 
 testdox: vendor/bin/phpunit $(PHP_FILES)
-	mkdir -p build/reports/phpunit
-	php -dzend_extension=xdebug.so ./vendor/bin/phpunit -c ./phpunit.xml.dist --fail-on-warning --testdox
+	$(call header,Running Unit Tests (Pretty format))
+	@XDEBUG_MODE=coverage php -dzend_extension=xdebug.so ./vendor/bin/phpunit --fail-on-warning --testdox
+
+clean:
+	$(call header,Cleaning previous build)
+	@if [ "$(shell ls -A ./build)" ]; then rm -rf ./build/*; fi; echo " done"
+
+ci: clean validate install phpcs tests php74compatibility php81compatibility analyze
