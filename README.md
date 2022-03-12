@@ -1,5 +1,11 @@
 # MtgMelee Client
 
+[![Current version](https://img.shields.io/packagist/v/magiclegacy/mtgmelee-client.svg?logo=composer)](https://packagist.org/packages/magiclegacy/mtgmelee-client)
+[![Supported PHP version](https://img.shields.io/static/v1?logo=php&label=PHP&message=7.4|8.0|8.1&color=777bb4)](https://packagist.org/packages/eureka/component-database)
+![CI](https://github.com/magiclegacy/mtgmelee-client/workflows/CI/badge.svg)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=magiclegacy_mtgmelee-client&metric=alert_status)](https://sonarcloud.io/dashboard?id=magiclegacy_mtgmelee-client)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=magiclegacy_mtgmelee-client&metric=coverage)](https://sonarcloud.io/dashboard?id=magiclegacy_mtgmelee-client)
+
 MtgMelee Client to retrieve some information from MtgMelee.
 
 Currently supported data:
@@ -126,4 +132,3 @@ Available getters:
 
 Available method:
  * `Standing::getPairings(int $id, [int $nbResult = 500, [int $start = 0]]): Pairing[]`
-  

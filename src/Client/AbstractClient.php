@@ -179,7 +179,7 @@ class AbstractClient
     }
 
     /**
-     * @param $data
+     * @param \stdClass|string $data
      * @param ResponseInterface $response
      * @param int $internalCode
      * @return string

@@ -4,8 +4,12 @@ composer.lock
 /vendor/
 
 #~ Tests
-build/
+/build/*
 .phpunit.result.cache
 
 #~ Misc
-.idea/
+.idea
+
+#~ Overridden condigs
+phpstan.neon
+phpunit.xml

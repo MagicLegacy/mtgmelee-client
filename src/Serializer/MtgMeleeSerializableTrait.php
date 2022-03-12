@@ -24,7 +24,9 @@ trait MtgMeleeSerializableTrait
     public function jsonSerialize(): array
     {
         $data = [];
-        foreach ($this as $property => $value) {
+        /** @var iterable $object */
+        $object = $this;
+        foreach ($object as $property => $value) {
             $data[$property] = ($value instanceof \JsonSerializable) ? $value->jsonSerialize() : $value;
         }
 
