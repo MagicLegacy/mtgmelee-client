@@ -21,10 +21,6 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Message\UriFactoryInterface;
 use Psr\Log\LoggerInterface;
-use Safe\Exceptions\JsonException;
-
-use function Safe\json_decode;
-use function Safe\json_encode;
 
 /**
  * Class AbstractClient
@@ -102,7 +98,7 @@ class AbstractClient
             $data = $response->getBody()->getContents();
 
             if (!empty($data)) {
-                $decodedData = json_decode($data);
+                $decodedData = json_decode($data, null, 512, JSON_THROW_ON_ERROR);
             }
 
             if ($response->getStatusCode() >= 400) {
@@ -113,7 +109,7 @@ class AbstractClient
             $message = $this->getErrorMessage($decodedData, $response, $code);
 
             throw new MtgMeleeClientException($message, $code, $exception);
-        } catch (JsonException $exception) {
+        } catch (\JsonException $exception) {
             throw new MtgMeleeClientException('[CLI-2001] Unable to decode json response!', 2001, $exception);
         } catch (ClientExceptionInterface $exception) {
             throw new MtgMeleeClientException('[CLI-2000] ' . $exception->getMessage(), 2000, $exception);
@@ -134,7 +130,6 @@ class AbstractClient
      * @param string $method
      * @param array $params
      * @return RequestInterface
-     * @throws JsonException
      */
     protected function getRequest(string $path, string $method = 'GET', array $params = []): RequestInterface
     {

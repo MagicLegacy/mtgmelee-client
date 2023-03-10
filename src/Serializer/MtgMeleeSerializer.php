@@ -12,9 +12,6 @@ declare(strict_types=1);
 namespace MagicLegacy\Component\MtgMelee\Serializer;
 
 use MagicLegacy\Component\MtgMelee\Exception\MtgMeleeSerializerException;
-use Safe\Exceptions\JsonException;
-
-use function Safe\{json_encode, json_decode};
 
 /**
  * Class MtgMeleeSerializer
@@ -31,8 +28,8 @@ final class MtgMeleeSerializer
     public function serialize(\JsonSerializable $object): string
     {
         try {
-            return json_encode($object);
-        } catch (JsonException $exception) {
+            return json_encode($object, JSON_THROW_ON_ERROR);
+        } catch (\JsonException $exception) {
             throw new MtgMeleeSerializerException('[CLI-8200] Cannot serialize data (json_encode failed)!', 8200, $exception);
         }
     }
@@ -47,10 +44,10 @@ final class MtgMeleeSerializer
     public function unserialize(string $json, string $class, bool $skippableParameters = false)
     {
         try {
-            $data = json_decode($json, true);
+            $data = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
 
             return $this->hydrate($class, $data, $skippableParameters);
-        } catch (JsonException $exception) {
+        } catch (\JsonException $exception) {
             throw new MtgMeleeSerializerException('[CLI-8201] Cannot unserialize data (json_decode failed)!', 8201, $exception);
         }
     }

@@ -9,14 +9,12 @@
 
 declare(strict_types=1);
 
-namespace MagicLegacy\Component\MtgMelee\Test\Serializer;
+namespace MagicLegacy\Component\MtgMelee\Tests\Serializer;
 
 use MagicLegacy\Component\MtgMelee\Entity\Pairing;
 use MagicLegacy\Component\MtgMelee\Exception\MtgMeleeSerializerException;
 use MagicLegacy\Component\MtgMelee\Serializer\MtgMeleeSerializer;
 use PHPUnit\Framework\TestCase;
-use Safe;
-use Safe\Exceptions\JsonException;
 
 /**
  * Class SerializerTest
@@ -50,14 +48,14 @@ class SerializerTest extends TestCase
 
     /**
      * @return void
-     * @throws JsonException
+     * @throws \JsonException
      */
     public function testAnExceptionIsThrownWhenUnserializedStringHaveNotSupportedField(): void
     {
         $data = ['tournamentId' => 1, 'anyField' => 'any'];
 
         $this->expectException(MtgMeleeSerializerException::class);
-        (new MtgMeleeSerializer())->unserialize(Safe\json_encode($data), Pairing::class);
+        (new MtgMeleeSerializer())->unserialize(json_encode($data, JSON_THROW_ON_ERROR), Pairing::class);
     }
 
     /**
@@ -68,7 +66,7 @@ class SerializerTest extends TestCase
         $this->expectException(MtgMeleeSerializerException::class);
         (new MtgMeleeSerializer())->serialize(
             new class implements \JsonSerializable {
-                public function jsonSerialize()
+                public function jsonSerialize(): string
                 {
                     return "\xB1\x31";
                 }
