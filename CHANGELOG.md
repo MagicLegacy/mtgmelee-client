@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [0.4.2] - 2023-03-10
+[0.4.2]: https://github.com/MagicLegacy/mtgmelee-client/compare/0.4.1...0.4.2
+### Changed
+- Update player entity to have display name
+
 ## [0.4.1] - 2023-03-10
 [0.4.1]: https://github.com/MagicLegacy/mtgmelee-client/compare/0.4.0...0.4.1
 ### Changed
@@ -14,7 +19,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 [0.4.0]: https://github.com/MagicLegacy/mtgmelee-client/compare/0.3.1...0.4.0
 ### Changed
 - Support PHP 8.2
-- Update player entity to have display name
 - Improve makefile
 - Update composer.json
 - Update client to use native json function & exception

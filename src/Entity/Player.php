@@ -22,54 +22,25 @@ class Player implements \JsonSerializable
 {
     use MtgMeleeSerializableTrait;
 
-    /** @var string $guid */
     private string $guid = '';
-
-    /** @var int $id */
     private int $id = 0;
-
-    /** @var string $userId */
     private string $userId = '';
-
-    /** @var string $userName */
     private string $userName = '';
-
-    /** @var string $name */
     private string $name = '';
-
-    /** @var bool $checkedIn */
+    private string $nameDisplay = '';
     private bool $checkedIn = false;
-
-    /** @var bool $confirmation */
     private bool $confirmation = false;
-
-    /** @var string $deckArchetypeName */
     private string $deckArchetypeName = '';
-
-    /** @var int $deckListId */
     private int $deckListId = 0;
-
-    /** @var string $discordTag */
     private string $discordTag = '';
-
-    /** @var string $arenaTag */
     private string $arenaTag = '';
-
-    /** @var string $twitchLink */
     private string $twitchLink = '';
 
-    /**
-     * @return string
-     */
     public function getGuid(): string
     {
         return $this->guid;
     }
 
-    /**
-     * @param string $guid
-     * @return Player
-     */
     public function setGuid(string $guid): Player
     {
         $this->guid = $guid;
@@ -77,18 +48,11 @@ class Player implements \JsonSerializable
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     * @return Player
-     */
     public function setId(int $id): Player
     {
         $this->id = $id;
@@ -96,18 +60,11 @@ class Player implements \JsonSerializable
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getUserId(): string
     {
         return $this->userId;
     }
 
-    /**
-     * @param string  $userId
-     * @return Player
-     */
     public function setUserId(string $userId): Player
     {
         $this->userId = $userId;
@@ -115,18 +72,11 @@ class Player implements \JsonSerializable
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getUserName(): string
     {
         return $this->userName;
     }
 
-    /**
-     * @param string $userName
-     * @return Player
-     */
     public function setUserName(string $userName): Player
     {
         $this->userName = $userName;
@@ -134,18 +84,11 @@ class Player implements \JsonSerializable
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @param string $name
-     * @return Player
-     */
     public function setName(string $name): Player
     {
         $this->name = $name;
@@ -153,18 +96,23 @@ class Player implements \JsonSerializable
         return $this;
     }
 
-    /**
-     * @return bool
-     */
+    public function getNameDisplay(): string
+    {
+        return $this->nameDisplay;
+    }
+
+    public function setNameDisplay(string $nameDisplay): Player
+    {
+        $this->nameDisplay = $nameDisplay;
+
+        return $this;
+    }
+
     public function isCheckedIn(): bool
     {
         return $this->checkedIn;
     }
 
-    /**
-     * @param bool $checkedIn
-     * @return Player
-     */
     public function setCheckedIn(bool $checkedIn): Player
     {
         $this->checkedIn = $checkedIn;
@@ -172,18 +120,11 @@ class Player implements \JsonSerializable
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isConfirmation(): bool
     {
         return $this->confirmation;
     }
 
-    /**
-     * @param bool $confirmation
-     * @return Player
-     */
     public function setConfirmation(bool $confirmation): Player
     {
         $this->confirmation = $confirmation;
@@ -191,18 +132,11 @@ class Player implements \JsonSerializable
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getDeckArchetypeName(): string
     {
         return $this->deckArchetypeName;
     }
 
-    /**
-     * @param string $deckArchetypeName
-     * @return Player
-     */
     public function setDeckArchetypeName(string $deckArchetypeName): Player
     {
         $this->deckArchetypeName = $deckArchetypeName;
@@ -210,18 +144,11 @@ class Player implements \JsonSerializable
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getDeckListId(): int
     {
         return $this->deckListId;
     }
 
-    /**
-     * @param int $deckListId
-     * @return Player
-     */
     public function setDeckListId(int $deckListId): Player
     {
         $this->deckListId = $deckListId;
@@ -229,18 +156,11 @@ class Player implements \JsonSerializable
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getDiscordTag(): string
     {
         return $this->discordTag;
     }
 
-    /**
-     * @param string $discordTag
-     * @return Player
-     */
     public function setDiscordTag(string $discordTag): Player
     {
         $this->discordTag = $discordTag;
@@ -248,18 +168,11 @@ class Player implements \JsonSerializable
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getArenaTag(): string
     {
         return $this->arenaTag;
     }
 
-    /**
-     * @param string $arenaTag
-     * @return Player
-     */
     public function setArenaTag(string $arenaTag): Player
     {
         $this->arenaTag = $arenaTag;
@@ -267,18 +180,11 @@ class Player implements \JsonSerializable
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getTwitchLink(): string
     {
         return $this->twitchLink;
     }
 
-    /**
-     * @param string $twitchLink
-     * @return Player
-     */
     public function setTwitchLink(string $twitchLink): Player
     {
         $this->twitchLink = $twitchLink;
