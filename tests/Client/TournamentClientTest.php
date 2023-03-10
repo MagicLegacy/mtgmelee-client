@@ -9,7 +9,7 @@
 
 declare(strict_types=1);
 
-namespace MagicLegacy\Component\MtgMelee\Test\Client;
+namespace MagicLegacy\Component\MtgMelee\Tests\Client;
 
 use MagicLegacy\Component\MtgMelee\Client\TournamentClient;
 use MagicLegacy\Component\MtgMelee\Entity\DeckList;

@@ -46,8 +46,8 @@ jobs:
       - name: PHP 7.4 Compatibility
         run: make php74compatibility
 
-      - name: PHP 8.1 Compatibility
-        run: make php81compatibility
+      - name: PHP 8.2 Compatibility
+        run: make php82compatibility
 
       - name: PHP Static Analyzis
         run: make analyze
