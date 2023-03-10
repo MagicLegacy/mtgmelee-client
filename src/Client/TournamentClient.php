@@ -64,6 +64,7 @@ class TournamentClient extends AbstractClient
             'columns[0][searchable]'    => 'true',
             'columns[0][orderable]'     => 'true',
             'columns[0][search][value]' => '',
+            'columns[0][search][regex]' => 'false',
             'columns[1][data]'          => 'Player1',
             'columns[1][name]'          => 'Player1',
             'columns[1][searchable]'    => 'true',

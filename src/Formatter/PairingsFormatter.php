@@ -105,7 +105,7 @@ final class PairingsFormatter implements FormatterInterface
             $result->setScore($matches[1], (int) $matches[2], (int) $matches[3]);
         } elseif (stripos('0-0-3 Draw', $pairing->Result) === 0) {
             $result->setDraw();
-        } elseif (preg_match('`(.+?) was assigned a bye`', $pairing->Result, $matches)) {
+        } elseif (preg_match('`(.+?) was (awarded|assigned) a bye`', $pairing->Result, $matches)) {
             $result->setBye();
         } else {
             throw new \RuntimeException('Invalid score: "' . $pairing->Result . '"');
