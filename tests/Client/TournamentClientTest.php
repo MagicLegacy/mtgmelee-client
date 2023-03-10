@@ -49,7 +49,9 @@ class TournamentClientTest extends TestCase
         $this->assertSame('Nissa vs : Nissa was awarded a bye', (string) $pairings[0]->getResult());
 
         //~ Chandra vs Jace
-        $this->assertSame('Chandra vs Jace: Jace won 2-1-0', (string) $pairings[1]->getResult());
+        $this->assertSame('Chandra Nalaar vs Jace Berelen: Jace Berelen won 2-1-0', (string) $pairings[1]->getResult());
+        $this->assertSame('Nalaar, Chandra', $pairings[1]->getPlayerOne()->getNameDisplay());
+        $this->assertSame('Berelen, Jace', $pairings[1]->getPlayerTwo()->getNameDisplay());
 
         //~ Liliana vs Gideon
         $this->assertSame('Liliana vs Gideon: 0-0-3 draw', (string) $pairings[2]->getResult());
@@ -60,6 +62,8 @@ class TournamentClientTest extends TestCase
         $this->assertSame('Teferi vs Ajani: Teferi won 2-0-0', (string) $result);
         $this->assertSame('Teferi', $result->getPlayerOne()->getName());
         $this->assertSame('Ajani', $result->getPlayerTwo()->getName());
+        $this->assertSame('Teferi', $result->getPlayerOne()->getNameDisplay());
+        $this->assertSame('Ajani', $result->getPlayerTwo()->getNameDisplay());
         $this->assertSame(2, $result->getScorePlayerOne());
         $this->assertSame(0, $result->getScorePlayerTwo());
         $this->assertSame($pairings[3]->getPlayerOne(), $result->getPlayerOne());
@@ -241,6 +245,7 @@ class TournamentClientTest extends TestCase
                     "Team1Id": 111,
                     "Team2Id": null,
                     "Player1": "Nissa",
+                    "Player1DisplayNameLastFirst": "Nissa",
                     "Player1Decklist": "Mono Green",
                     "Player1Discord": "nissa#0001",
                     "Player1ScreenName": "nissa_mtg#00001",
@@ -248,6 +253,7 @@ class TournamentClientTest extends TestCase
                     "Player1UserId": "u0000000-0000-0000-0000-000000000001",
                     "Player1Username": "Nissa (Planeswalker)",
                     "Player2": null,
+                    "Player2DisplayNameLastFirst": null,
                     "Player2Decklist": "Decklist",
                     "Player2Discord": null,
                     "Player2ScreenName": null,
@@ -278,14 +284,16 @@ class TournamentClientTest extends TestCase
                     "Player2Id": 4,
                     "Team1Id": 333,
                     "Team2Id": 444,
-                    "Player1": "Chandra",
+                    "Player1": "Chandra Nalaar",
+                    "Player1DisplayNameLastFirst": "Nalaar, Chandra",
                     "Player1Decklist": "Mono Red",
                     "Player1Discord": "chandra#0001",
                     "Player1ScreenName": "chandra_mtg#00001",
                     "Player1Twitch": null,
                     "Player1UserId": "u0000000-0000-0000-0000-000000000003",
                     "Player1Username": "Chandra (Planeswalker)",
-                    "Player2": "Jace",
+                    "Player2": "Jace Berelen",
+                    "Player2DisplayNameLastFirst": "Berelen, Jace",
                     "Player2Decklist": "Mono Blue",
                     "Player2Discord": "jace#0001",
                     "Player2ScreenName": "jace_mtg#0001",
@@ -317,6 +325,7 @@ class TournamentClientTest extends TestCase
                     "Team1Id": 555,
                     "Team2Id": 666,
                     "Player1": "Liliana",
+                    "Player1DisplayNameLastFirst": "Liliana",
                     "Player1Decklist": "Mono Black",
                     "Player1Discord": "liliana#0001",
                     "Player1ScreenName": "liliana_mtg#00001",
@@ -324,6 +333,7 @@ class TournamentClientTest extends TestCase
                     "Player1UserId": "u0000000-0000-0000-0000-000000000005",
                     "Player1Username": "Liliana (Planeswalker)",
                     "Player2": "Gideon",
+                    "Player2DisplayNameLastFirst": "Gideon",
                     "Player2Decklist": "Mono White",
                     "Player2Discord": "gideon#0001",
                     "Player2ScreenName": "gideon_mtg#0001",
@@ -355,6 +365,7 @@ class TournamentClientTest extends TestCase
                     "Team1Id": 777,
                     "Team2Id": 888,
                     "Player1": "Bolas",
+                    "Player1DisplayNameLastFirst": "Bolas",
                     "Player1Decklist": "Mono Black",
                     "Player1Discord": "bolas#0001",
                     "Player1ScreenName": "bolas_mtg#00001",
@@ -362,6 +373,7 @@ class TournamentClientTest extends TestCase
                     "Player1UserId": "u0000000-0000-0000-0000-000000000007",
                     "Player1Username": "Bolas (Planeswalker)",
                     "Player2": "Ugin",
+                    "Player2DisplayNameLastFirst": "Ugin",
                     "Player2Decklist": "Mono Artifact",
                     "Player2Discord": "ugin#0001",
                     "Player2ScreenName": "ugin_mtg#0001",
@@ -393,6 +405,7 @@ class TournamentClientTest extends TestCase
                     "Team1Id": 999,
                     "Team2Id": 101010,
                     "Player1": "Teferi",
+                    "Player1DisplayNameLastFirst": "Teferi",
                     "Player1Decklist": "Mono Blue",
                     "Player1Discord": "teferi#0001",
                     "Player1ScreenName": "teferi_mtg#00001",
@@ -400,6 +413,7 @@ class TournamentClientTest extends TestCase
                     "Player1UserId": "u0000000-0000-0000-0000-000000000009",
                     "Player1Username": "Teferi (Planeswalker)",
                     "Player2": "Ajani",
+                    "Player2DisplayNameLastFirst": "Ajani",
                     "Player2Decklist": "Mono White",
                     "Player2Discord": "ajani#0001",
                     "Player2ScreenName": "ajani_mtg#0001",

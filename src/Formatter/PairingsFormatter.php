@@ -85,7 +85,8 @@ final class PairingsFormatter implements FormatterInterface
             ->setConfirmation($pairing->{$prefix . 'Confirmation'} ?? false)
             ->setDiscordTag($pairing->{$prefix . 'Discord'} ?? '')
             ->setArenaTag($pairing->{$prefix . 'ScreenName'} ?? '')
-            ->setName($pairing->{$prefix . ''} ?? '')
+            ->setName($pairing->{$prefix} ?? '')
+            ->setNameDisplay($pairing->{$prefix . 'DisplayNameLastFirst'} ?? '')
             ->setTwitchLink($pairing->{$prefix . 'Twitch'} ?? '')
         ;
     }
