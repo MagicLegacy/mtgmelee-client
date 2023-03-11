@@ -194,11 +194,11 @@ class Result implements \JsonSerializable
         }
 
         if ($this->isDraw()) {
-            return $string . ' 0-0-3 draw';
+            return $string . '1-1-0 Draw';
         }
 
         if ($this->isForfeited()) {
-            return $string . ' forfeited the match';
+            return $string . 'forfeited the match';
         }
 
         return $string . $this->getWinner()->getName() . ' won ' . $this->getWinnerScore() . '-' . $this->getOpponentScore() . '-0';
