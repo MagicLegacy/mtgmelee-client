@@ -102,10 +102,12 @@ final class PairingsFormatter implements FormatterInterface
     {
         $result = new Result($playerOne, $playerTwo);
 
-        if (preg_match('`(.+?) won ([0-2])-([0-2])-0`', $pairing->Result, $matches)) {
+        if (preg_match('`(.+?) won ([0-3])-([0-3])-0`', $pairing->Result, $matches)) {
             $result->setScore($matches[1], (int) $matches[2], (int) $matches[3]);
-        } elseif (stripos('0-0-3 Draw', $pairing->Result) === 0) {
+        } elseif (preg_match('`([0-3])-([0-3])-([0-3]) Draw`', $pairing->Result, $matches)) {
             $result->setDraw();
+        } elseif (preg_match('`(.+?) forfeited the match`', $pairing->Result, $matches)) {
+            $result->setForfeited();
         } elseif (preg_match('`(.+?) was (awarded|assigned) a bye`', $pairing->Result, $matches)) {
             $result->setBye();
         } else {

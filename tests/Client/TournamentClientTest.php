@@ -54,7 +54,7 @@ class TournamentClientTest extends TestCase
         $this->assertSame('Berelen, Jace', $pairings[1]->getPlayerTwo()->getNameDisplay());
 
         //~ Liliana vs Gideon
-        $this->assertSame('Liliana vs Gideon: 0-0-3 draw', (string) $pairings[2]->getResult());
+        $this->assertSame('Liliana vs Gideon: 1-1-0 Draw', (string) $pairings[2]->getResult());
         $this->assertNull($pairings[2]->getResult()->getWinner());
 
         //~ Teferi vs Ajani
@@ -342,7 +342,7 @@ class TournamentClientTest extends TestCase
                     "Player2Username": "Gideon (Planeswalker)",
                     "RoundName": null,
                     "IsChatBlocked": false,
-                    "Result": "0-0-3 draw"
+                    "Result": "1-1-0 Draw"
                 },
                 {
                     "ID": "00000000-0000-0000-0000-000000000004",
