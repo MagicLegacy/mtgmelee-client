@@ -39,6 +39,7 @@ class Result implements \JsonSerializable
 
     /** @var bool $isBye */
     private bool $isBye = false;
+    private bool $isForfeited = false;
 
     /**
      * Result constructor.
@@ -105,6 +106,18 @@ class Result implements \JsonSerializable
         return $this;
     }
 
+    public function isForfeited(): bool
+    {
+        return $this->isForfeited;
+    }
+
+    public function setForfeited(): Result
+    {
+        $this->isForfeited = true;
+
+        return $this;
+    }
+
     /**
      * @return bool
      */
@@ -141,7 +154,7 @@ class Result implements \JsonSerializable
      */
     public function getWinnerScore(): int
     {
-        return $this->scorePlayerOne > $this->scorePlayerTwo ? $this->scorePlayerOne : $this->scorePlayerTwo;
+        return max($this->scorePlayerOne, $this->scorePlayerTwo);
     }
 
     /**
@@ -149,7 +162,7 @@ class Result implements \JsonSerializable
      */
     public function getOpponentScore(): int
     {
-        return $this->scorePlayerOne <= $this->scorePlayerTwo ? $this->scorePlayerOne : $this->scorePlayerTwo;
+        return min($this->scorePlayerOne, $this->scorePlayerTwo);
     }
 
     /**
@@ -181,7 +194,11 @@ class Result implements \JsonSerializable
         }
 
         if ($this->isDraw()) {
-            return $string . '0-0-3 draw';
+            return $string . ' 0-0-3 draw';
+        }
+
+        if ($this->isForfeited()) {
+            return $string . ' forfeited the match';
         }
 
         return $string . $this->getWinner()->getName() . ' won ' . $this->getWinnerScore() . '-' . $this->getOpponentScore() . '-0';

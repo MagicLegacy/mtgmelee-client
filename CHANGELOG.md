@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [0.4.3] - 2023-03-10
+[0.4.3]: https://github.com/MagicLegacy/mtgmelee-client/compare/0.4.2...0.4.3
+### Changed
+- Fix result parsing & add forfeited possibility
+
 ## [0.4.2] - 2023-03-10
 [0.4.2]: https://github.com/MagicLegacy/mtgmelee-client/compare/0.4.1...0.4.2
 ### Changed
