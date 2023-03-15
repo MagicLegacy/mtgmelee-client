@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace MagicLegacy\Component\MtgMelee\Entity;
 
-use MagicLegacy\Component\MtgMelee\Serializer\MtgMeleeSerializableTrait;
+use Eureka\Component\Serializer\JsonSerializableTrait;
 
 /**
  * Class DeckList
@@ -20,7 +20,7 @@ use MagicLegacy\Component\MtgMelee\Serializer\MtgMeleeSerializableTrait;
  */
 class DeckList implements \JsonSerializable
 {
-    use MtgMeleeSerializableTrait;
+    use JsonSerializableTrait;
 
     /** @var int $tournamentId */
     private int $id;

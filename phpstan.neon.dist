@@ -1,6 +1,6 @@
 parameters:
-  phpVersion: 70400 # PHP 7.4 - Current minimal version supported
-  level: 5
+  phpVersion: 80100 # PHP 7.4 - Current minimal version supported
+  level: max
   paths:
     - ./src
     - ./tests
@@ -8,4 +8,6 @@ parameters:
   bootstrapFiles:
     - ./vendor/autoload.php
 
-  ignoreErrors: []
+  ignoreErrors:
+    - message: '`Method .+ should return .+ but returns array<object>\|object\|string\|null.`'
+      path:    ./src/Client/*

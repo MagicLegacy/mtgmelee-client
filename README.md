@@ -18,15 +18,18 @@ composer require magiclegacy/mtgmelee-client
 ```
 
 ## Usage in application
+
+### Tournament (full example)
 ```php
 <?php
 
 namespace Application;
 
 use MagicLegacy\Component\MtgMelee\Client\TournamentClient;
-use MagicLegacy\Component\MtgMelee\Client\Service\Standing;
 use Eureka\Component\Curl;
 use Nyholm\Psr7\Factory\Psr17Factory;
+
+require_once __DIR__ . '/../vendor/autoload.php';
 
 //~ Declare tier required services (included as dependencies)
 $httpFactory    = new Psr17Factory();
@@ -37,17 +40,72 @@ $mtgMeleeClient = new TournamentClient(
     $httpFactory
 );
 
-//~ Declare Standing service to retrieve pairings with given standing id (in MtgMelee)
-$standingService = new Standing($mtgMeleeClient);
-$pairings        = $standingService->getPairings(11042);
+$tournament = $mtgMeleeClient->getTournament(14139);
+echo "{$tournament->getName()} (#{$tournament->getId()}, date: {$tournament->getDate()->format('Y-m-d H:i:s')}, link {$tournament->getLink()})\n------------------------------\n\n";
+
+foreach ($tournament->getRounds() as $round) {
+    echo "{$round->getName()} (#{$round->getId()}, is top: {$round->isTop()})\n";
+}
+
+```
+see: [examples/tournament.php](./examples/tournament.php)
+
+This will output:
+```txt
+Legacy European Championship Naples (#14139, date: 2023-03-11 08:00:00, link /Tournament/View/14139)
+------------------------------
+
+Round 1 (#65678, is top: )
+Round 2 (#65679, is top: )
+Round 3 (#65680, is top: )
+Round 4 (#65681, is top: )
+Round 5 (#65682, is top: )
+Round 6 (#65683, is top: )
+Round 7 (#65684, is top: )
+Round 8 (#65685, is top: )
+Round 9 (#65686, is top: )
+Round 10 (#65687, is top: )
+Round 11 (#65688, is top: )
+Round 12 (#65689, is top: )
+Round 13 (#65690, is top: )
+Round 14 (#65691, is top: )
+Round 15 (#65692, is top: )
+Quarterfinals (#65693, is top: 1)
+Semifinals (#65694, is top: 1)
+Finals (#65695, is top: 1)
+```
+
+### Rounds
+```php
+<?php
+
+// ...
+
+$rounds = $mtgMeleeClient->getRounds(14139);
+
+foreach ($rounds as $round) {
+    echo "{$round->getName()} (#{$round->getId()}, is top: {$round->isTop()})\n";
+}
+```
+see: [examples/rounds.php](./examples/rounds.php)
+
+
+### Standings
+```php
+<?php
+
+// ...
+
+$pairings  = $mtgMeleeClient->getPairings(11042);
 
 foreach ($pairings as $pairing) {
     $result = $pairing->getResult();
 
     echo (string) $result . PHP_EOL;
 }
+
 ```
-see: [example.php](./examples/standing.php)
+see: [examples/standing.php](./examples/standing.php)
 
 The output will be:
 ```text
@@ -85,50 +143,69 @@ zachary kiihne vs Jean-Emmanuel Depraz: zachary kiihne won 2-1-0
 ```
 
 ## Entities
+### Tournament
+
+Available getters:
+- `Tournament::getId(): int`
+- `Tournament::getDate(): \DateTimeImmutable`
+- `Tournament::getName(): string`
+- `Tournament::getLink(): string`
+- `Tournament::getRounds(): Round[]`
+
+### Round
+
+Available getters:
+- `Round::getId(): int`
+- `Round::getName(): string`
+- `Round::getNumber(): int`
+- `Round::isStarted(): bool`
+- `Round::isTop(): bool`
+
+
 ### Entity Pairing
 
 Available getters:
- * `Pairing::getDay(): int`
- * `Pairing::getPlayerOne(): Player`
- * `Pairing::getPlayerTwo(): Player`
- * `Pairing::getResult(): Result`
- * `Pairing::getRound(): int`
- * `Pairing::getTournamentId(): int`
- * `Pairing::isTop8(): bool`
- 
- 
+- `Pairing::getPlayerOne(): Player`
+- `Pairing::getPlayerTwo(): Player`
+- `Pairing::getResult(): Result`
+- `Pairing::getRound(): int`
+- `Pairing::getTournamentId(): int`
+
+### Entity Result
+
+Available getters:
+- `Result::getOpponentScore(): int`
+- `Result::getPlayerOne(): Player`
+- `Result::getPlayerTwo(): Player`
+- `Result::getScorePlayerOne(): int`
+- `Result::getScorePlayerTwo(): int`
+- `Result::getWinner(): Player|null`
+- `Result::getWinnerScore(): int`
+- `Result::isBye(): bool`
+- `Result::isDraw(): bool`
+- `Result::isForfeited(): bool`
+
 ### Entity Player
 
 Available getters:
- * `Player::getArenaTag(): string`
- * `Player::getDeckArchetypeName(): string`
- * `Player::getDeckListId(): int`
- * `Player::getDiscordTag(): string`
- * `Player::getGuid(): string`
- * `Player::getId(): int`
- * `Player::getName(): string`
- * `Player::getTwitchLink(): string`
- * `Player::getUserId(): string`
- * `Player::getUserName(): string`
- * `Player::isCheckedIn(): bool`
- * `Player::isConfirmation(): bool`
- 
-### Entity Result
- 
- Available getters:
-  * `Result::getOpponentScore(): int`
-  * `Result::getPlayerOne(): Player`
-  * `Result::getPlayerTwo(): Player`
-  * `Result::getScorePlayerOne(): int`
-  * `Result::getScorePlayerTwo(): int`
-  * `Result::getWinner(): Player|null`
-  * `Result::getWinnerScore(): int`
-  * `Result::isBye(): bool`
-  * `Result::isDraw(): bool`
-  
-## Services
+- `Player::getArenaTag(): string`
+- `Player::getDeckArchetypeName(): string`
+- `Player::getDeckListId(): int`
+- `Player::getDiscordTag(): string`
+- `Player::getGuid(): string`
+- `Player::getId(): int`
+- `Player::getName(): string`
+- `Player::getNameDisplay(): string`
+- `Player::getTwitchLink(): string`
+- `Player::getUserId(): string`
+- `Player::getUserName(): string`
+- `Player::isCheckedIn(): bool`
+- `Player::isConfirmation(): bool`
 
-### Standing
+### Entity DeckList
 
-Available method:
- * `Standing::getPairings(int $id, [int $nbResult = 500, [int $start = 0]]): Pairing[]`
+Available getters:
+- `DeckList::getId(): int`
+- `DeckList::getArchetype(): string`
+- `DeckList::getArenaList(): string`
+- `DeckList::getImageUrl(): string`

@@ -27,17 +27,20 @@
     "php": "7.4.*||8.0.*||8.1.*||8.2.*",
     "ext-curl": "*",
     "ext-json": "*",
+    "ext-dom": "*",
 
     "psr/http-client": "^1.0",
     "psr/http-factory": "^1.0",
     "psr/log": "^1.1||^2.0||^3.0",
 
-    "eureka/component-curl": "^2.2"
+    "eureka/component-curl": "^2.2",
+    "eureka/component-serializer": "^1.0"
   },
 
   "require-dev": {
     "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
     "dg/bypass-finals": "^1.4",
+    "nyholm/psr7": "^1.5",
     "phpstan/phpstan": "^1.10",
     "phpunit/phpcov": "^8.2",
     "phpunit/phpunit": "^9.6",

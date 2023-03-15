@@ -25,10 +25,10 @@ final class PairingsFormatter implements FormatterInterface
     /**
      * Format data & return list of value object.
      *
-     * @param mixed $data
+     * @param \stdClass $data
      * @return Pairing[]
      */
-    public function format($data)
+    public function format($data): array
     {
         if (!isset($data->data)) {
             return [];

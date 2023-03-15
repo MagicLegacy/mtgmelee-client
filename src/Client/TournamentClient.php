@@ -13,9 +13,13 @@ namespace MagicLegacy\Component\MtgMelee\Client;
 
 use MagicLegacy\Component\MtgMelee\Entity\DeckList;
 use MagicLegacy\Component\MtgMelee\Entity\Pairing;
+use MagicLegacy\Component\MtgMelee\Entity\Round;
+use MagicLegacy\Component\MtgMelee\Entity\Tournament;
 use MagicLegacy\Component\MtgMelee\Exception\MtgMeleeClientException;
 use MagicLegacy\Component\MtgMelee\Formatter\DeckListFormatter;
 use MagicLegacy\Component\MtgMelee\Formatter\PairingsFormatter;
+use MagicLegacy\Component\MtgMelee\Formatter\RoundFormatter;
+use MagicLegacy\Component\MtgMelee\Formatter\TournamentFormatter;
 
 /**
  * Class MtgMeleeClient
@@ -25,13 +29,32 @@ use MagicLegacy\Component\MtgMelee\Formatter\PairingsFormatter;
 class TournamentClient extends AbstractClient
 {
     /**
+     * @return Tournament|null
+     * @throws MtgMeleeClientException|\JsonException
+     */
+    public function getTournament(int $tournamentId): ?Tournament
+    {
+        return $this->fetchPageResult('/Tournament/View/' . $tournamentId, new TournamentFormatter());
+    }
+
+    /**
+     * @return Round[]
+     * @phpstan-return list<Round>
+     * @throws MtgMeleeClientException|\JsonException
+     */
+    public function getRounds(int $tournamentId): array
+    {
+        return $this->fetchPageResult('/Tournament/View/' . $tournamentId, new RoundFormatter());
+    }
+
+    /**
      * @param int $id
      * @param int $nbResults
      * @param int $start
-     * @return Pairing[]
+     * @return array<Pairing>
      * @throws MtgMeleeClientException
      */
-    public function getPairings(int $id, int $nbResults = 500, int $start = 0): iterable
+    public function getPairings(int $id, int $nbResults = 500, int $start = 0): array
     {
         $params = [
             'body' => $this->getRoundPairingsBody($nbResults, $start),

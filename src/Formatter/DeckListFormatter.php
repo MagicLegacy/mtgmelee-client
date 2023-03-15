@@ -29,7 +29,7 @@ final class DeckListFormatter implements FormatterInterface
     public function format($data)
     {
         if (empty($data)) {
-            return null;
+            return null; // @codeCoverageIgnore
         }
 
         return new DeckList(

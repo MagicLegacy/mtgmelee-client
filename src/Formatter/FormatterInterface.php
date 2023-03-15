@@ -21,8 +21,8 @@ interface FormatterInterface
     /**
      * Format data & return list of value object.
      *
-     * @param mixed $data
-     * @return mixed|iterable
+     * @param \stdClass|string $data
+     * @return object|object[]|null
      */
     public function format($data);
 }

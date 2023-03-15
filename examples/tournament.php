@@ -17,10 +17,9 @@ $mtgMeleeClient = new TournamentClient(
     $httpFactory
 );
 
-$pairings  = $mtgMeleeClient->getPairings(11042);
+$tournament = $mtgMeleeClient->getTournament(14139);
+echo "{$tournament->getName()} (#{$tournament->getId()}, date: {$tournament->getDate()->format('Y-m-d H:i:s')}, link {$tournament->getLink()})\n------------------------------\n\n";
 
-foreach ($pairings as $pairing) {
-    $result = $pairing->getResult();
-
-    echo (string) $result . PHP_EOL;
+foreach ($tournament->getRounds() as $round) {
+    echo "{$round->getName()} (#{$round->getId()}, is top: {$round->isTop()})\n";
 }
