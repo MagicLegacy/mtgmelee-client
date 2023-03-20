@@ -1,5 +1,5 @@
 parameters:
-  phpVersion: 80100 # PHP 7.4 - Current minimal version supported
+  phpVersion: 80100 # PHP 8.1 - Current minimal version supported
   level: max
   paths:
     - ./src
@@ -8,6 +8,4 @@ parameters:
   bootstrapFiles:
     - ./vendor/autoload.php
 
-  ignoreErrors:
-    - message: '`Method .+ should return .+ but returns array<object>\|object\|string\|null.`'
-      path:    ./src/Client/*
+  ignoreErrors: []

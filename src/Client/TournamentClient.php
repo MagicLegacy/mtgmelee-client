@@ -29,29 +29,25 @@ use MagicLegacy\Component\MtgMelee\Formatter\TournamentFormatter;
 class TournamentClient extends AbstractClient
 {
     /**
-     * @return Tournament|null
+     * @phpstan-return Tournament
      * @throws MtgMeleeClientException|\JsonException
      */
-    public function getTournament(int $tournamentId): ?Tournament
+    public function getTournament(int $tournamentId): Tournament|null
     {
         return $this->fetchPageResult('/Tournament/View/' . $tournamentId, new TournamentFormatter());
     }
 
     /**
-     * @return Round[]
      * @phpstan-return list<Round>
      * @throws MtgMeleeClientException|\JsonException
      */
     public function getRounds(int $tournamentId): array
     {
-        return $this->fetchPageResult('/Tournament/View/' . $tournamentId, new RoundFormatter());
+        return $this->fetchPageResults('/Tournament/View/' . $tournamentId, new RoundFormatter());
     }
 
     /**
-     * @param int $id
-     * @param int $nbResults
-     * @param int $start
-     * @return array<Pairing>
+     * @phpstan-return list<Pairing>
      * @throws MtgMeleeClientException
      */
     public function getPairings(int $id, int $nbResults = 500, int $start = 0): array
@@ -60,15 +56,19 @@ class TournamentClient extends AbstractClient
             'body' => $this->getRoundPairingsBody($nbResults, $start),
         ];
 
-        return $this->fetchResult('/Tournament/GetRoundPairings/' . $id, new PairingsFormatter(), 'POST', $params);
+        return $this->fetchResults(
+            '/Tournament/GetRoundPairings/' . $id,
+            new PairingsFormatter(),
+            'POST',
+            $params
+        );
     }
 
     /**
-     * @param int $id
-     * @return DeckList
+     * @phpstan-return DeckList|null
      * @throws MtgMeleeClientException
      */
-    public function getDeckList(int $id): DeckList
+    public function getDeckList(int $id): DeckList|null
     {
         return $this->fetchResult('/Decklist/GetDecklistDetails?id=' . $id, new DeckListFormatter());
     }

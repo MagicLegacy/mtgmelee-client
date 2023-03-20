@@ -22,18 +22,16 @@ class Result implements \JsonSerializable
 {
     use JsonSerializableTrait;
 
-    private Player $playerOne;
-    private Player $playerTwo;
     private int $scorePlayerOne = 0;
     private int $scorePlayerTwo = 0;
     private bool $isDraw = false;
     private bool $isBye = false;
     private bool $isForfeited = false;
 
-    public function __construct(Player $playerOne, Player $playerTwo)
-    {
-        $this->playerOne = $playerOne;
-        $this->playerTwo = $playerTwo;
+    public function __construct(
+        private readonly Player $playerOne,
+        private readonly Player $playerTwo
+    ) {
     }
 
     /**

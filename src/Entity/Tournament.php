@@ -22,33 +22,16 @@ class Tournament implements \JsonSerializable
 {
     use JsonSerializableTrait;
 
-    private int $id;
-    private string $name;
-    private string $link;
-    private \DateTimeImmutable $date;
-
-    /** @var Round[] rounds */
-    private array $rounds;
-
     /**
-     * @param int $id
-     * @param string $name
-     * @param string $link
-     * @param \DateTimeImmutable $date
-     * @param Round[] $rounds
+     * @phpstan-param list<Round> $rounds
      */
     public function __construct(
-        int $id,
-        string $name,
-        string $link,
-        \DateTimeImmutable $date,
-        array $rounds
+        private readonly int $id,
+        private readonly string $name,
+        private readonly string $link,
+        private readonly \DateTimeImmutable $date,
+        private readonly array $rounds
     ) {
-        $this->id     = $id;
-        $this->name   = $name;
-        $this->link   = $link;
-        $this->date   = $date;
-        $this->rounds = $rounds;
     }
 
     public function getId(): int
@@ -72,7 +55,7 @@ class Tournament implements \JsonSerializable
     }
 
     /**
-     * @return Round[]
+     * @return list<Round>
      */
     public function getRounds(): array
     {

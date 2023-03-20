@@ -16,11 +16,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Remove Internal serializer. Now use eureka/component-serializer
 - Remove logger injection in client
 ### Changed
-- Fix phpstan error to lvl max
+- Fix phpstan error to lvl max & add generic types
 - Run main analyze for PHP 8.1
 - Updating some phpdoc & cleaning other
 - Update tests
 - Update README
+- Now Require PHP 8.1 as minimum version
 
 
 ## [0.4.3] - 2023-03-10

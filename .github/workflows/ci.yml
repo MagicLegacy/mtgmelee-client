@@ -41,17 +41,17 @@ jobs:
           sed -i 's+'$GITHUB_WORKSPACE'+/github/workspace+g' build/reports/phpunit/clover.xml
           sed -i 's+'$GITHUB_WORKSPACE'+/github/workspace+g' build/reports/phpunit/unit.xml
 
-      - name: PHP 7.4 Compatibility
-        run: make php74compatibility
+      - name: PHP 8.1 Compatibility
+        run: make php81compatibility
 
       - name: PHP 8.2 Compatibility
         run: make php82compatibility
 
-      - name: PHP Static Analyzis
+      - name: PHP Static Analyze
         run: make analyze
 
       - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@v1.6
+        uses: SonarSource/sonarcloud-github-action@v1.7
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

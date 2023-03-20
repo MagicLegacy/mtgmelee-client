@@ -22,24 +22,13 @@ class Round implements \JsonSerializable
 {
     use JsonSerializableTrait;
 
-    private int $id;
-    private int $number;
-    private string $name;
-    private bool $isStarted;
-    private bool $isTop;
-
     public function __construct(
-        int $id,
-        int $number,
-        string $name,
-        bool $isStarted,
-        bool $isTop
+        private readonly int $id,
+        private readonly int $number,
+        private readonly string $name,
+        private readonly bool $isStarted,
+        private readonly bool $isTop
     ) {
-        $this->id        = $id;
-        $this->number    = $number;
-        $this->name      = $name;
-        $this->isStarted = $isStarted;
-        $this->isTop     = $isTop;
     }
 
     public function getId(): int

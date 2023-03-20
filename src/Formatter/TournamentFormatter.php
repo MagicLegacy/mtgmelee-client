@@ -14,19 +14,20 @@ namespace MagicLegacy\Component\MtgMelee\Formatter;
 use MagicLegacy\Component\MtgMelee\Entity\Tournament;
 
 /**
- * Class PairingsFormatter
+ * Class TournamentFormatter
  *
  * @author Romain Cottard
+ *
+ * @phpstan-implements FormatterInterface<Tournament>
  */
 final class TournamentFormatter implements FormatterInterface
 {
     /**
      * Format data & return list of value object.
      *
-     * @param string $data
-     * @return Tournament|null
+     * @phpstan-param string $data
      */
-    public function format($data): ?Tournament
+    public function format(mixed $data): Tournament|null
     {
         if (empty($data)) {
             return null; // @codeCoverageIgnore
@@ -35,11 +36,7 @@ final class TournamentFormatter implements FormatterInterface
         return $this->parse($data);
     }
 
-    /**
-     * @param string $data
-     * @return Tournament|null
-     */
-    private function parse(string $data): ?Tournament
+    private function parse(string $data): Tournament|null
     {
         $page = new \DOMDocument();
         @$page->loadHTML($data);

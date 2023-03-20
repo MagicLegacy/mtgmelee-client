@@ -14,19 +14,20 @@ namespace MagicLegacy\Component\MtgMelee\Formatter;
 use MagicLegacy\Component\MtgMelee\Entity\Round;
 
 /**
- * Class PairingsFormatter
+ * Class RoundFormatter
  *
  * @author Romain Cottard
+ * @phpstan-implements FormatterInterface<Round>
  */
 final class RoundFormatter implements FormatterInterface
 {
     /**
      * Format data & return list of value object.
      *
-     * @param string $data
-     * @return Round[]
+     * @phpstan-param string $data
+     * @phpstan-return list<Round>
      */
-    public function format($data): array
+    public function format(mixed $data): array
     {
         $rounds = [];
 
@@ -66,7 +67,7 @@ final class RoundFormatter implements FormatterInterface
             $name      = $node->getAttribute('data-name');
             $isStarted = ($node->getAttribute('data-is-started') === 'True');
 
-            if (substr($name, 0, 5) === 'Round') {
+            if (str_starts_with($name, 'Round')) {
                 [, $number] = explode(' ', $name);
                 $number = (int) $number;
                 $isTop  = false;

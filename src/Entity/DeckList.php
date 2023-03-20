@@ -22,74 +22,37 @@ class DeckList implements \JsonSerializable
 {
     use JsonSerializableTrait;
 
-    /** @var int $tournamentId */
-    private int $id;
+    private readonly string $arenaList;
 
-    /** @var string $archetype */
-    private string $archetype;
-
-    /** @var string $imageUrl */
-    private string $imageUrl;
-
-    /** @var string $arenaList */
-    private string $arenaList;
-
-    /**
-     * Class constructor.
-     *
-     * @param int $id
-     * @param string $archetype
-     * @param string $imageUrl
-     * @param string $arenaList
-     */
     public function __construct(
-        int $id,
-        string $archetype,
-        string $imageUrl,
+        private readonly int $id,
+        private readonly string $archetype,
+        private readonly string $imageUrl,
         string $arenaList
     ) {
-        $this->id        = $id;
-        $this->archetype = $archetype;
-        $this->imageUrl  = $imageUrl;
         $this->arenaList = $this->cleanList($arenaList);
     }
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
     public function getArchetype(): string
     {
         return $this->archetype;
     }
 
-    /**
-     * @return string
-     */
     public function getImageUrl(): string
     {
         return $this->imageUrl;
     }
 
-    /**
-     * @return string
-     */
     public function getArenaList(): string
     {
         return $this->arenaList;
     }
 
-    /**
-     * @param string $arenaList
-     * @return string
-     */
     private function cleanList(string $arenaList): string
     {
         return str_replace("\r\n", "\n", $arenaList);

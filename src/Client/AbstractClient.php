@@ -20,11 +20,10 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Message\UriFactoryInterface;
-use Psr\Log\LoggerInterface;
 
 /**
  * Class AbstractClient
- * Exception code range: 2000-2049
+ * Exception code range : 2000-2049
  *
  * @author Romain Cottard
  */
@@ -32,29 +31,22 @@ class AbstractClient
 {
     private const BASE_URL = 'https://mtgmelee.com';
 
-    private ClientInterface $client;
-    private RequestFactoryInterface $requestFactory;
-    private UriFactoryInterface $uriFactory;
-    private StreamFactoryInterface $streamFactory;
-
     public function __construct(
-        ClientInterface $client,
-        RequestFactoryInterface $requestFactory,
-        UriFactoryInterface $uriFactory,
-        StreamFactoryInterface $streamFactory
+        private readonly ClientInterface $client,
+        private readonly RequestFactoryInterface $requestFactory,
+        private readonly UriFactoryInterface $uriFactory,
+        private readonly StreamFactoryInterface $streamFactory
     ) {
-        $this->client         = $client;
-        $this->requestFactory = $requestFactory;
-        $this->uriFactory     = $uriFactory;
-        $this->streamFactory  = $streamFactory;
     }
 
     /**
+     * @template TEntity
+     * @phpstan-param FormatterInterface<TEntity> $formatter
      * @phpstan-param array<string, string|int|float|bool|array<string|int>> $params
-     * @phpstan-return array<object>|object|string|null
+     * @phpstan-return TEntity|TEntity[]|null
      * @throws MtgMeleeClientException
      */
-    final protected function fetchResult(
+    final protected function fetch(
         string $path,
         FormatterInterface $formatter,
         string $method = 'GET',
@@ -70,7 +62,7 @@ class AbstractClient
             $data = $response->getBody()->getContents();
 
             if (!empty($data)) {
-                /** @var string|\stdClass $decodedData */
+                /** @var string|\stdClass|null $decodedData */
                 $decodedData = json_decode($data, null, 512, JSON_THROW_ON_ERROR);
             }
 
@@ -88,14 +80,55 @@ class AbstractClient
             throw new MtgMeleeClientException('[CLI-2000] ' . $exception->getMessage(), 2000, $exception);
         }
 
-        return $decodedData !== null ? $formatter->format($decodedData) : $decodedData;
+        return $decodedData !== null ? $formatter->format($decodedData) : null;
     }
+
     /**
+     * @template TEntity
+     * @phpstan-param FormatterInterface<TEntity> $formatter
      * @phpstan-param array<string, string|int|float|bool|array<string|int>> $params
-     * @phpstan-return array<object>|object|string|null
+     * @phpstan-return TEntity|null
+     * @throws MtgMeleeClientException
+     */
+    final protected function fetchResult(
+        string $path,
+        FormatterInterface $formatter,
+        string $method = 'GET',
+        array $params = []
+    ) {
+        /** @var TEntity|null $result */
+        $result = $this->fetch($path, $formatter, $method, $params);
+
+        return $result;
+    }
+
+    /**
+     * @template TEntity
+     * @phpstan-param FormatterInterface<TEntity> $formatter
+     * @phpstan-param array<string, string|int|float|bool|array<string|int>> $params
+     * @phpstan-return list<TEntity>
+     * @throws MtgMeleeClientException
+     */
+    final protected function fetchResults(
+        string $path,
+        FormatterInterface $formatter,
+        string $method = 'GET',
+        array $params = []
+    ): array {
+        /** @var list<TEntity> $result */
+        $result = $this->fetch($path, $formatter, $method, $params);
+
+        return $result;
+    }
+
+    /**
+     * @template TEntity
+     * @phpstan-param FormatterInterface<TEntity> $formatter
+     * @phpstan-param array<string, string|int|float|bool|array<string|int>> $params
+     * @phpstan-return TEntity|TEntity[]|null
      * @throws MtgMeleeClientException|\JsonException
      */
-    final protected function fetchPageResult(
+    final protected function fetchPage(
         string $path,
         FormatterInterface $formatter,
         string $method = 'GET',
@@ -127,6 +160,44 @@ class AbstractClient
     }
 
     /**
+     * @template TEntity
+     * @phpstan-param FormatterInterface<TEntity> $formatter
+     * @phpstan-param array<string, string|int|float|bool|array<string|int>> $params
+     * @phpstan-return TEntity|null
+     * @throws MtgMeleeClientException|\JsonException
+     */
+    final protected function fetchPageResult(
+        string $path,
+        FormatterInterface $formatter,
+        string $method = 'GET',
+        array $params = []
+    ) {
+        /** @var TEntity|null $result */
+        $result = $this->fetchPage($path, $formatter, $method, $params);
+
+        return $result;
+    }
+
+    /**
+     * @template TEntity
+     * @phpstan-param FormatterInterface<TEntity> $formatter
+     * @phpstan-param array<string, string|int|float|bool|array<string|int>> $params
+     * @phpstan-return list<TEntity>
+     * @throws MtgMeleeClientException|\JsonException
+     */
+    final protected function fetchPageResults(
+        string $path,
+        FormatterInterface $formatter,
+        string $method = 'GET',
+        array $params = []
+    ): array {
+        /** @var list<TEntity> $result */
+        $result = $this->fetchPage($path, $formatter, $method, $params);
+
+        return $result;
+    }
+
+    /**
      * @phpstan-param array<string, string|int|float|bool|array<string|int|float|bool>> $params
      * @throws \JsonException
      */
@@ -153,11 +224,11 @@ class AbstractClient
     }
 
     /**
-     * @param \stdClass|string|null $data
+     * @param string|\stdClass|null $data
      * @param ResponseInterface|null $response
      * @return int
      */
-    private function getErrorCode($data, ?ResponseInterface $response): int
+    private function getErrorCode(string|\stdClass|null $data, ?ResponseInterface $response): int
     {
         $code = 1002;
 
@@ -171,13 +242,16 @@ class AbstractClient
     }
 
     /**
-     * @param \stdClass|string|null $data
+     * @param string|\stdClass|null $data
      * @param ResponseInterface|null $response
      * @param int $internalCode
      * @return string
      */
-    private function getErrorMessage($data, ?ResponseInterface $response, int $internalCode): string
-    {
+    private function getErrorMessage(
+        string|\stdClass|null $data,
+        ?ResponseInterface $response,
+        int $internalCode
+    ): string {
         $error = !empty($data->errors) && is_array($data->errors) ? reset($data->errors) : null;
 
         $prefix = '[CLI-' . $internalCode . '] ';

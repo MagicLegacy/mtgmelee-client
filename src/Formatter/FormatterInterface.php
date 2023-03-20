@@ -11,18 +11,22 @@ declare(strict_types=1);
 
 namespace MagicLegacy\Component\MtgMelee\Formatter;
 
+use MagicLegacy\Component\MtgMelee\Entity\Raw;
+
 /**
  * Interface FormatterInterface
  *
  * @author Romain Cottard
+ *
+ * @template TEntity
  */
 interface FormatterInterface
 {
     /**
      * Format data & return list of value object.
      *
-     * @param \stdClass|string $data
-     * @return object|object[]|null
+     * @phpstan-param \stdClass|string $data
+     * @phpstan-return TEntity|TEntity[]|null
      */
-    public function format($data);
+    public function format(mixed $data);
 }

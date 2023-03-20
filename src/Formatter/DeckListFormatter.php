@@ -17,6 +17,7 @@ use MagicLegacy\Component\MtgMelee\Entity\DeckList;
  * Class DeckListFormatter
  *
  * @author Romain Cottard
+ * @phpstan-implements FormatterInterface<DeckList>
  */
 final class DeckListFormatter implements FormatterInterface
 {
@@ -26,7 +27,7 @@ final class DeckListFormatter implements FormatterInterface
      * @param \stdClass|null $data
      * @return DeckList|null
      */
-    public function format($data)
+    public function format(mixed $data): DeckList|null
     {
         if (empty($data)) {
             return null; // @codeCoverageIgnore
