@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace MagicLegacy\Component\MtgMelee\Entity;
 
-use MagicLegacy\Component\MtgMelee\Serializer\MtgMeleeSerializableTrait;
+use Eureka\Component\Serializer\JsonSerializableTrait;
 
 /**
  * Class Player
@@ -20,7 +20,7 @@ use MagicLegacy\Component\MtgMelee\Serializer\MtgMeleeSerializableTrait;
  */
 class Player implements \JsonSerializable
 {
-    use MtgMeleeSerializableTrait;
+    use JsonSerializableTrait;
 
     private string $guid = '';
     private int $id = 0;

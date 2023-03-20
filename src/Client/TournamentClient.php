@@ -13,9 +13,13 @@ namespace MagicLegacy\Component\MtgMelee\Client;
 
 use MagicLegacy\Component\MtgMelee\Entity\DeckList;
 use MagicLegacy\Component\MtgMelee\Entity\Pairing;
+use MagicLegacy\Component\MtgMelee\Entity\Round;
+use MagicLegacy\Component\MtgMelee\Entity\Tournament;
 use MagicLegacy\Component\MtgMelee\Exception\MtgMeleeClientException;
 use MagicLegacy\Component\MtgMelee\Formatter\DeckListFormatter;
 use MagicLegacy\Component\MtgMelee\Formatter\PairingsFormatter;
+use MagicLegacy\Component\MtgMelee\Formatter\RoundFormatter;
+use MagicLegacy\Component\MtgMelee\Formatter\TournamentFormatter;
 
 /**
  * Class MtgMeleeClient
@@ -25,27 +29,46 @@ use MagicLegacy\Component\MtgMelee\Formatter\PairingsFormatter;
 class TournamentClient extends AbstractClient
 {
     /**
-     * @param int $id
-     * @param int $nbResults
-     * @param int $start
-     * @return Pairing[]
+     * @phpstan-return Tournament
+     * @throws MtgMeleeClientException|\JsonException
+     */
+    public function getTournament(int $tournamentId): Tournament|null
+    {
+        return $this->fetchPageResult('/Tournament/View/' . $tournamentId, new TournamentFormatter());
+    }
+
+    /**
+     * @phpstan-return list<Round>
+     * @throws MtgMeleeClientException|\JsonException
+     */
+    public function getRounds(int $tournamentId): array
+    {
+        return $this->fetchPageResults('/Tournament/View/' . $tournamentId, new RoundFormatter());
+    }
+
+    /**
+     * @phpstan-return list<Pairing>
      * @throws MtgMeleeClientException
      */
-    public function getPairings(int $id, int $nbResults = 500, int $start = 0): iterable
+    public function getPairings(int $id, int $nbResults = 500, int $start = 0): array
     {
         $params = [
             'body' => $this->getRoundPairingsBody($nbResults, $start),
         ];
 
-        return $this->fetchResult('/Tournament/GetRoundPairings/' . $id, new PairingsFormatter(), 'POST', $params);
+        return $this->fetchResults(
+            '/Tournament/GetRoundPairings/' . $id,
+            new PairingsFormatter(),
+            'POST',
+            $params
+        );
     }
 
     /**
-     * @param int $id
-     * @return DeckList
+     * @phpstan-return DeckList|null
      * @throws MtgMeleeClientException
      */
-    public function getDeckList(int $id): DeckList
+    public function getDeckList(int $id): DeckList|null
     {
         return $this->fetchResult('/Decklist/GetDecklistDetails?id=' . $id, new DeckListFormatter());
     }

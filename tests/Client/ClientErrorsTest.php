@@ -124,7 +124,7 @@ class ClientErrorsTest extends TestCase
                 ->willReturn($response);
         }
 
-        return new TournamentClient($httpClientMock, $httpFactory, $httpFactory, $httpFactory, new NullLogger());
+        return new TournamentClient($httpClientMock, $httpFactory, $httpFactory, $httpFactory);
     }
 
     /**

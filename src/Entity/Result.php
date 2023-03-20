@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace MagicLegacy\Component\MtgMelee\Entity;
 
-use MagicLegacy\Component\MtgMelee\Serializer\MtgMeleeSerializableTrait;
+use Eureka\Component\Serializer\JsonSerializableTrait;
 
 /**
  * Class Result
@@ -20,37 +20,18 @@ use MagicLegacy\Component\MtgMelee\Serializer\MtgMeleeSerializableTrait;
  */
 class Result implements \JsonSerializable
 {
-    use MtgMeleeSerializableTrait;
+    use JsonSerializableTrait;
 
-    /** @var Player $playerOne */
-    private Player $playerOne;
-
-    /** @var Player $playerTwo */
-    private Player $playerTwo;
-
-    /** @var int $scorePlayerOne */
     private int $scorePlayerOne = 0;
-
-    /** @var int $scorePlayerTwo */
     private int $scorePlayerTwo = 0;
-
-    /** @var bool $isDraw */
     private bool $isDraw = false;
-
-    /** @var bool $isBye */
     private bool $isBye = false;
     private bool $isForfeited = false;
 
-    /**
-     * Result constructor.
-     *
-     * @param Player $playerOne
-     * @param Player $playerTwo
-     */
-    public function __construct(Player $playerOne, Player $playerTwo)
-    {
-        $this->playerOne      = $playerOne;
-        $this->playerTwo      = $playerTwo;
+    public function __construct(
+        private readonly Player $playerOne,
+        private readonly Player $playerTwo
+    ) {
     }
 
     /**
@@ -69,12 +50,6 @@ class Result implements \JsonSerializable
         return $this->playerTwo;
     }
 
-    /**
-     * @param string $winnerName
-     * @param int $winnerResult
-     * @param int $opponentResult
-     * @return $this
-     */
     public function setScore(string $winnerName, int $winnerResult, int $opponentResult): Result
     {
         if ($this->playerOne->getName() === $winnerName) {
@@ -88,17 +63,11 @@ class Result implements \JsonSerializable
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isDraw(): bool
     {
         return $this->isDraw;
     }
 
-    /**
-     * @return Result
-     */
     public function setDraw(): Result
     {
         $this->isDraw = true;
@@ -118,9 +87,6 @@ class Result implements \JsonSerializable
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isBye(): bool
     {
         return $this->isBye;
@@ -133,41 +99,26 @@ class Result implements \JsonSerializable
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getScorePlayerOne(): int
     {
         return $this->scorePlayerOne;
     }
 
-    /**
-     * @return int
-     */
     public function getScorePlayerTwo(): int
     {
         return $this->scorePlayerTwo;
     }
 
-    /**
-     * @return int
-     */
     public function getWinnerScore(): int
     {
         return max($this->scorePlayerOne, $this->scorePlayerTwo);
     }
 
-    /**
-     * @return int
-     */
     public function getOpponentScore(): int
     {
         return min($this->scorePlayerOne, $this->scorePlayerTwo);
     }
 
-    /**
-     * @return Player|null
-     */
     public function getWinner(): ?Player
     {
         if ($this->scorePlayerOne > $this->scorePlayerTwo) {
@@ -182,9 +133,6 @@ class Result implements \JsonSerializable
         return null;
     }
 
-    /**
-     * @return string
-     */
     public function __toString(): string
     {
         $string = $this->playerOne->getName() . ' vs ' . $this->playerTwo->getName() . ': ';
@@ -201,6 +149,12 @@ class Result implements \JsonSerializable
             return $string . 'forfeited the match';
         }
 
-        return $string . $this->getWinner()->getName() . ' won ' . $this->getWinnerScore() . '-' . $this->getOpponentScore() . '-0';
+        if (empty($this->getWinner())) {
+            return $string . ' - wrong or not supported data'; // @codeCoverageIgnore
+        }
+
+        return $string . $this->getWinner()->getName() . ' won ' . $this->getWinnerScore() . '-' .
+            $this->getOpponentScore() . '-0'
+        ;
     }
 }

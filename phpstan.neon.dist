@@ -1,6 +1,6 @@
 parameters:
-  phpVersion: 70400 # PHP 7.4 - Current minimal version supported
-  level: 5
+  phpVersion: 80100 # PHP 8.1 - Current minimal version supported
+  level: max
   paths:
     - ./src
     - ./tests

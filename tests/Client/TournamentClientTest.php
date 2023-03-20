@@ -13,6 +13,7 @@ namespace MagicLegacy\Component\MtgMelee\Tests\Client;
 
 use MagicLegacy\Component\MtgMelee\Client\TournamentClient;
 use MagicLegacy\Component\MtgMelee\Entity\DeckList;
+use MagicLegacy\Component\MtgMelee\Entity\Tournament;
 use MagicLegacy\Component\MtgMelee\Exception\MtgMeleeClientException;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use PHPUnit\Framework\TestCase;
@@ -26,6 +27,58 @@ use Psr\Log\NullLogger;
  */
 class TournamentClientTest extends TestCase
 {
+    public function testICanGetTournamentData(): void
+    {
+        //~ Givent
+        $client = $this->getClient($this->getPageResponseMock());
+
+        //~ When
+        $tournament = $client->getTournament(1);
+
+        //~ Then
+        $this->assertInstanceOf(Tournament::class, $tournament);
+        $this->assertSame('Legacy European Championship Naples', $tournament->getName());
+        $this->assertSame(14139, $tournament->getId());
+        $this->assertSame('2023-03-11 08:00:00', $tournament->getDate()->format('Y-m-d H:i:s'));
+        $this->assertSame('/Tournament/View/14139', $tournament->getLink());
+
+        //~ Check rounds
+        $rounds = $tournament->getRounds();
+        for ($i = 0; $i < count($rounds) - 3; $i++) {
+            $this->assertSame('Round ' . ($i + 1), $rounds[$i]->getName());
+        }
+
+        //~ Check for final
+        $this->assertSame(65695, $rounds[17]->getId());
+        $this->assertSame('Finals', $rounds[17]->getName());
+        $this->assertSame(18, $rounds[17]->getNumber());
+        $this->assertTrue($rounds[17]->isStarted());
+        $this->assertTrue($rounds[17]->isTop());
+    }
+
+    public function testICanGetRoundsData(): void
+    {
+        //~ Givent
+        $client = $this->getClient($this->getPageResponseMock());
+
+        //~ When
+        $rounds = $client->getRounds(1);
+
+        //~ Then
+
+        //~ Check rounds
+        for ($i = 0; $i < count($rounds) - 3; $i++) {
+            $this->assertSame('Round ' . ($i + 1), $rounds[$i]->getName());
+        }
+
+        //~ Check for final
+        $this->assertSame(65695, $rounds[17]->getId());
+        $this->assertSame('Finals', $rounds[17]->getName());
+        $this->assertSame(18, $rounds[17]->getNumber());
+        $this->assertTrue($rounds[17]->isStarted());
+        $this->assertTrue($rounds[17]->isTop());
+    }
+
     /**
      * @return void
      * @throws MtgMeleeClientException
@@ -40,7 +93,7 @@ class TournamentClientTest extends TestCase
 
         //~ Then
         $this->assertIsArray($pairings);
-        $this->assertCount(4, $pairings);
+        $this->assertCount(5, $pairings);
 
         $this->assertSame(1, $pairings[0]->getTournamentId(), 'Tournament is invalid');
         $this->assertSame(1, $pairings[0]->getRound(), 'Round is invalid');
@@ -83,6 +136,11 @@ class TournamentClientTest extends TestCase
         $this->assertSame('teferi#0001', $teferi->getDiscordTag());
         $this->assertTrue($teferi->isCheckedIn());
         $this->assertTrue($teferi->isConfirmation());
+
+        //~ The Wandering Emperor
+        $result = $pairings[4]->getResult();
+        $this->assertTrue($result->isForfeited());
+        $this->assertSame('The Wandering Emperor vs : forfeited the match', (string) $result);
     }
 
     /**
@@ -152,8 +210,7 @@ class TournamentClientTest extends TestCase
             $httpClientMock,
             $httpFactory,
             $httpFactory,
-            $httpFactory,
-            new NullLogger()
+            $httpFactory
         );
     }
 
@@ -172,8 +229,7 @@ class TournamentClientTest extends TestCase
             $httpClientMock,
             $httpFactory,
             $httpFactory,
-            $httpFactory,
-            new NullLogger()
+            $httpFactory
         );
     }
 
@@ -195,7 +251,7 @@ class TournamentClientTest extends TestCase
         return $response->withBody($stream);
     }
 
-    private function getDeckListResponseMock()
+    private function getDeckListResponseMock(): ResponseInterface
     {
         $httpFactory = new Psr17Factory();
 
@@ -206,6 +262,17 @@ class TournamentClientTest extends TestCase
             "ScreenshotUrl": "http://cdn.example.com/image/test.jpg",
             "ArenaDecklistString": "Deck\r\n4 Card\r\n\r\nSideboard\r\n4 Other Card"
         }');
+
+        $stream->rewind();
+        return $response->withBody($stream);
+    }
+
+    private function getPageResponseMock(): ResponseInterface
+    {
+        $httpFactory = new Psr17Factory();
+
+        $response = $httpFactory->createResponse(200);
+        $stream   = $httpFactory->createStream((string) file_get_contents(__DIR__ . '/../data/mtgmelee.html'));
 
         $stream->rewind();
         return $response->withBody($stream);
@@ -423,6 +490,46 @@ class TournamentClientTest extends TestCase
                     "RoundName": null,
                     "IsChatBlocked": false,
                     "Result": "Teferi won 2-0-0"
+                },
+                {
+                    "ID": "00000000-0000-0000-0000-000000000005",
+                    "TournamentId": 1,
+                    "RoundNumber": 1,
+                    "PhaseId": 1,
+                    "Player1Guid": "p0000000-0000-0000-0000-000000000009",
+                    "Player2Guid": "p0000000-0000-0000-0000-000000000010",
+                    "HasResults": true,
+                    "Player1CheckedIn": true,
+                    "Player1Confirmation": true,
+                    "Player2CheckedIn": true,
+                    "Player2Confirmation": true,
+                    "IsPublished": true,
+                    "SortOrder": 1001,
+                    "Player1DecklistId": 99,
+                    "Player1Id": 9,
+                    "Player2DecklistId": 1010,
+                    "Player2Id": 10,
+                    "Team1Id": 999,
+                    "Team2Id": 101010,
+                    "Player1": "The Wandering Emperor",
+                    "Player1DisplayNameLastFirst": "The Wandering Emperor",
+                    "Player1Decklist": "Mono White",
+                    "Player1Discord": "The Wandering Emperor#0001",
+                    "Player1ScreenName": "The Wandering Emperor#00001",
+                    "Player1Twitch": "twitch.com/TheWanderingEmperor",
+                    "Player1UserId": "u0000000-0000-0000-0000-000000000009",
+                    "Player1Username": "The Wandering Emperor (Planeswalker)",
+                    "Player2": null,
+                    "Player2DisplayNameLastFirst": null,
+                    "Player2Decklist": "Decklist",
+                    "Player2Discord": null,
+                    "Player2ScreenName": null,
+                    "Player2Twitch": null,
+                    "Player2UserId": null,
+                    "Player2Username": null,
+                    "RoundName": null,
+                    "IsChatBlocked": false,
+                    "Result": "The Wandering Emperor forfeited the match"
                 }
             ]
         }');

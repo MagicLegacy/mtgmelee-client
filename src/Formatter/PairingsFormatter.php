@@ -19,16 +19,17 @@ use MagicLegacy\Component\MtgMelee\Entity\Result;
  * Class PairingsFormatter
  *
  * @author Romain Cottard
+ * @phpstan-implements FormatterInterface<Pairing>
  */
 final class PairingsFormatter implements FormatterInterface
 {
     /**
      * Format data & return list of value object.
      *
-     * @param mixed $data
-     * @return Pairing[]
+     * @phpstan-param \stdClass $data
+     * @phpstan-return list<Pairing>
      */
-    public function format($data)
+    public function format(mixed $data): array
     {
         if (!isset($data->data)) {
             return [];
@@ -46,7 +47,7 @@ final class PairingsFormatter implements FormatterInterface
                     ->setPlayerTwo($playerTwo)
                     ->setResult($this->getResult($pairingData, $playerOne, $playerTwo))
                 ;
-            } catch (\RuntimeException $exception) {
+            } catch (\RuntimeException) {
                 //~ Unknown result match, skip it
                 continue;
             }
@@ -72,7 +73,7 @@ final class PairingsFormatter implements FormatterInterface
      * @param string $prefix
      * @return Player
      */
-    private function getPlayer(\stdClass $pairing, string $prefix = 'Player1'): Player
+    private function getPlayer(\stdClass $pairing, string $prefix): Player
     {
         return (new Player())
             ->setId($pairing->{$prefix . 'Id'} ?? 0)
