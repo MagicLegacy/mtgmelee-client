@@ -29,7 +29,7 @@ use Psr\Http\Message\UriFactoryInterface;
  */
 class AbstractClient
 {
-    private const BASE_URL = 'https://mtgmelee.com';
+    private const BASE_URL = 'https://melee.gg';
 
     public function __construct(
         private readonly ClientInterface $client,
