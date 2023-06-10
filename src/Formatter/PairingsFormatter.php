@@ -105,8 +105,10 @@ final class PairingsFormatter implements FormatterInterface
 
         if (preg_match('`(.+?) won ([0-3])-([0-3])-0`', $pairing->Result, $matches)) {
             $result->setScore($matches[1], (int) $matches[2], (int) $matches[3]);
-        } elseif (preg_match('`([0-3])-([0-3])-([0-3]) Draw`', $pairing->Result, $matches)) {
+        } elseif (preg_match('`([0-1])-([0-1])-0 Draw`', $pairing->Result, $matches)) {
             $result->setDraw();
+        } elseif (preg_match('`0-0-3 Draw`', $pairing->Result, $matches)) {
+            $result->setDrawIntentional();
         } elseif (preg_match('`(.+?) forfeited the match`', $pairing->Result, $matches)) {
             $result->setForfeited();
         } elseif (preg_match('`(.+?) was (awarded|assigned) a bye`', $pairing->Result, $matches)) {

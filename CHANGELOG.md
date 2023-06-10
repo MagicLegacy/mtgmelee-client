@@ -4,11 +4,10 @@ All notable changes to this project will be documented in this file.
 The format based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [1.1.0] - 2023-03
-[1.1.0]: https://github.com/MagicLegacy/mtgmelee-client/compare/1.0.0...1.1.0
+## [1.1.1] - 2023-06-10
+[1.1.1]: https://github.com/MagicLegacy/mtgmelee-client/compare/1.1.0...1.1.1
 ### Changed
-- Update the base url for mtg melee (now is melee.gg)
-- Upgrade PHPUnit to 10+
+- Now import result for intentional draw is flag as intentional draw
 
 
 ## [1.0.0] - 2023-03

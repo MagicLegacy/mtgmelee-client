@@ -25,6 +25,7 @@ class Result implements \JsonSerializable
     private int $scorePlayerOne = 0;
     private int $scorePlayerTwo = 0;
     private bool $isDraw = false;
+    private bool $isDrawIntentional = false;
     private bool $isBye = false;
     private bool $isForfeited = false;
 
@@ -71,6 +72,18 @@ class Result implements \JsonSerializable
     public function setDraw(): Result
     {
         $this->isDraw = true;
+
+        return $this;
+    }
+
+    public function isDrawIntentional(): bool
+    {
+        return $this->isDrawIntentional;
+    }
+
+    public function setDrawIntentional(): Result
+    {
+        $this->isDrawIntentional = true;
 
         return $this;
     }
