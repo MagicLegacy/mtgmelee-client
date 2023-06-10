@@ -93,7 +93,7 @@ class TournamentClientTest extends TestCase
 
         //~ Then
         $this->assertIsArray($pairings);
-        $this->assertCount(5, $pairings);
+        $this->assertCount(7, $pairings);
 
         $this->assertSame(1, $pairings[0]->getTournamentId(), 'Tournament is invalid');
         $this->assertSame(1, $pairings[0]->getRound(), 'Round is invalid');
@@ -141,6 +141,16 @@ class TournamentClientTest extends TestCase
         $result = $pairings[4]->getResult();
         $this->assertTrue($result->isForfeited());
         $this->assertSame('The Wandering Emperor vs : forfeited the match', (string) $result);
+
+        //~ Sorin vs The Wanderer
+        $result = $pairings[5]->getResult();
+        $this->assertTrue($result->inProgress());
+        $this->assertSame('Sorin vs The Wanderer: in progress', (string) $result);
+
+        //~ Planeswalker_1 vs Planeswalker_2
+        $result = $pairings[6]->getResult();
+        $this->assertTrue($result->isDrawIntentional());
+        $this->assertSame('Planeswalker_1 vs Planeswalker_2: intentional draw (ID)', (string) $result);
     }
 
     /**
@@ -530,6 +540,86 @@ class TournamentClientTest extends TestCase
                     "RoundName": null,
                     "IsChatBlocked": false,
                     "Result": "The Wandering Emperor forfeited the match"
+                },
+                {
+                    "ID": "00000000-0000-0000-0000-000000000003",
+                    "TournamentId": 1,
+                    "RoundNumber": 1,
+                    "PhaseId": 1,
+                    "Player1Guid": "p0000000-0000-0000-0000-000000000005",
+                    "Player2Guid": "p0000000-0000-0000-0000-000000000006",
+                    "HasResults": false,
+                    "Player1CheckedIn": true,
+                    "Player1Confirmation": true,
+                    "Player2CheckedIn": true,
+                    "Player2Confirmation": true,
+                    "IsPublished": true,
+                    "SortOrder": 1001,
+                    "Player1DecklistId": 55,
+                    "Player1Id": 5,
+                    "Player2DecklistId": 66,
+                    "Player2Id": 6,
+                    "Team1Id": 555,
+                    "Team2Id": 666,
+                    "Player1": "Sorin",
+                    "Player1DisplayNameLastFirst": "Sorin",
+                    "Player1Decklist": "Mono Black",
+                    "Player1Discord": "sorin#0001",
+                    "Player1ScreenName": "sorin_mtg#00001",
+                    "Player1Twitch": "twitch.com/Sorin",
+                    "Player1UserId": "u0000000-0000-0000-0000-000000000005",
+                    "Player1Username": "Sorin (Planeswalker)",
+                    "Player2": "The Wanderer",
+                    "Player2DisplayNameLastFirst": "The Wanderer",
+                    "Player2Decklist": "Mono White",
+                    "Player2Discord": "the_wanderer#0001",
+                    "Player2ScreenName": "the_wanderer_mtg#0001",
+                    "Player2Twitch": "twitch.com/TheWanderer",
+                    "Player2UserId": "u0000000-0000-0000-0000-000000000006",
+                    "Player2Username": "The Wanderer (Planeswalker)",
+                    "RoundName": null,
+                    "IsChatBlocked": false,
+                    "Result": "Not reported"
+                },
+                {
+                    "ID": "00000000-0000-0000-0000-000000000003",
+                    "TournamentId": 1,
+                    "RoundNumber": 1,
+                    "PhaseId": 1,
+                    "Player1Guid": "p0000000-0000-0000-0000-000000000005",
+                    "Player2Guid": "p0000000-0000-0000-0000-000000000006",
+                    "HasResults": false,
+                    "Player1CheckedIn": true,
+                    "Player1Confirmation": true,
+                    "Player2CheckedIn": true,
+                    "Player2Confirmation": true,
+                    "IsPublished": true,
+                    "SortOrder": 1001,
+                    "Player1DecklistId": 55,
+                    "Player1Id": 5,
+                    "Player2DecklistId": 66,
+                    "Player2Id": 6,
+                    "Team1Id": 555,
+                    "Team2Id": 666,
+                    "Player1": "Planeswalker_1",
+                    "Player1DisplayNameLastFirst": "Planeswalker_1",
+                    "Player1Decklist": "Mono Black",
+                    "Player1Discord": "Planeswalker_1#0001",
+                    "Player1ScreenName": "Planeswalker_1#00001",
+                    "Player1Twitch": "twitch.com/Planeswalker_1",
+                    "Player1UserId": "u0000000-0000-0000-0000-000000000005",
+                    "Player1Username": "Planeswalker_1 (Planeswalker)",
+                    "Player2": "Planeswalker_2",
+                    "Player2DisplayNameLastFirst": "Planeswalker_2",
+                    "Player2Decklist": "Mono White",
+                    "Player2Discord": "Planeswalker_2#0001",
+                    "Player2ScreenName": "Planeswalker_2#0001",
+                    "Player2Twitch": "twitch.com/Planeswalker_2",
+                    "Player2UserId": "u0000000-0000-0000-0000-000000000006",
+                    "Player2Username": "Planeswalker_2 (Planeswalker)",
+                    "RoundName": null,
+                    "IsChatBlocked": false,
+                    "Result": "0-0-3 Draw"
                 }
             ]
         }');

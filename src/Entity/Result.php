@@ -28,6 +28,7 @@ class Result implements \JsonSerializable
     private bool $isDrawIntentional = false;
     private bool $isBye = false;
     private bool $isForfeited = false;
+    private bool $inProgress = false;
 
     public function __construct(
         private readonly Player $playerOne,
@@ -112,6 +113,18 @@ class Result implements \JsonSerializable
         return $this;
     }
 
+    public function inProgress(): bool
+    {
+        return $this->inProgress;
+    }
+
+    public function setInProgress(): Result
+    {
+        $this->inProgress = true;
+
+        return $this;
+    }
+
     public function getScorePlayerOne(): int
     {
         return $this->scorePlayerOne;
@@ -156,6 +169,14 @@ class Result implements \JsonSerializable
 
         if ($this->isDraw()) {
             return $string . '1-1-0 Draw';
+        }
+
+        if ($this->isDrawIntentional()) {
+            return $string . 'intentional draw (ID)';
+        }
+
+        if ($this->inProgress()) {
+            return $string . 'in progress';
         }
 
         if ($this->isForfeited()) {
