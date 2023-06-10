@@ -113,6 +113,8 @@ final class PairingsFormatter implements FormatterInterface
             $result->setForfeited();
         } elseif (preg_match('`(.+?) was (awarded|assigned) a bye`', $pairing->Result, $matches)) {
             $result->setBye();
+        } elseif ($pairing->Result === 'Not reported') {
+            $result->setInProgress();
         } else {
             throw new \RuntimeException('Invalid score: "' . $pairing->Result . '"');
         }
